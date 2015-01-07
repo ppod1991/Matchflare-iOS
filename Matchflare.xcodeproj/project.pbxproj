@@ -7,6 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13CB7A351A5618A500BD744D /* MatcheeOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */; };
+		13CB7A431A5B283D00BD744D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A421A5B283D00BD744D /* ChatViewController.m */; };
+		13CB7A461A5B2C1A00BD744D /* ChatMessageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */; };
+		13CB7A4A1A5BBDDD00BD744D /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */; };
+		13CB7A4C1A5BBF1800BD744D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13CB7A4B1A5BBF1800BD744D /* Security.framework */; };
+		13CB7A4E1A5BBF2400BD744D /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13CB7A4D1A5BBF2400BD744D /* CFNetwork.framework */; };
+		13CB7A501A5BBF4000BD744D /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 13CB7A4F1A5BBF4000BD744D /* libicucore.dylib */; };
+		13CB7A521A5BBF5C00BD744D /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 13CB7A511A5BBF5C00BD744D /* libresolv.dylib */; };
+		13D733041A51DF0000D8D11C /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D733031A51DF0000D8D11C /* Contacts.m */; };
+		13D733071A51F2BC00D8D11C /* MatchesAndPairs.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D733061A51F2BC00D8D11C /* MatchesAndPairs.m */; };
+		13D7330A1A51F51000D8D11C /* PresentMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D733091A51F51000D8D11C /* PresentMatchesViewController.m */; };
+		13D7330D1A52710F00D8D11C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D7330C1A52710F00D8D11C /* RegisterViewController.m */; };
 		13EE5FB31A4B4B1E00C72E91 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */; };
 		13EE5FB51A4B4B1E00C72E91 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB41A4B4B1E00C72E91 /* CoreGraphics.framework */; };
 		13EE5FB71A4B4B1E00C72E91 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB61A4B4B1E00C72E91 /* UIKit.framework */; };
@@ -21,6 +33,22 @@
 		13EE5FD41A4B4B1E00C72E91 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB61A4B4B1E00C72E91 /* UIKit.framework */; };
 		13EE5FDC1A4B4B1E00C72E91 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 13EE5FDA1A4B4B1E00C72E91 /* InfoPlist.strings */; };
 		13EE5FDE1A4B4B1E00C72E91 /* MatchflareTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FDD1A4B4B1E00C72E91 /* MatchflareTests.m */; };
+		13EE5FE91A4B4C7000C72E91 /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FE81A4B4C7000C72E91 /* SplashViewController.m */; };
+		13EE5FEC1A4B537200C72E91 /* Global.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FEB1A4B537200C72E91 /* Global.m */; };
+		13EE5FEF1A4B53D600C72E91 /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FEE1A4B53D600C72E91 /* Person.m */; };
+		13EE5FF21A4B6AF900C72E91 /* Match.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FF11A4B6AF900C72E91 /* Match.m */; };
+		13EE5FF51A4B6C8F00C72E91 /* Notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FF41A4B6C8F00C72E91 /* Notification.m */; };
+		13EE5FF81A4B6D2300C72E91 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FF71A4B6D2300C72E91 /* ChatMessage.m */; };
+		13EE5FFF1A4BC7AC00C72E91 /* SplashPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */; };
+		13EE60001A4BC7AC00C72E91 /* SplashPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */; };
+		13FF69DC1A534DE9000CD363 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D61A534D07000CD363 /* OpenSans-Bold.ttf */; };
+		13FF69DD1A534DE9000CD363 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D71A534D07000CD363 /* OpenSans-ExtraBold.ttf */; };
+		13FF69DE1A534DE9000CD363 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D81A534D07000CD363 /* OpenSans-Light.ttf */; };
+		13FF69DF1A534DE9000CD363 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D91A534D07000CD363 /* OpenSans-Regular.ttf */; };
+		13FF69E01A534DE9000CD363 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69DA1A534D07000CD363 /* OpenSans-Semibold.ttf */; };
+		13FF69E11A534DE9000CD363 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69DB1A534D07000CD363 /* OpenSans-SemiboldItalic.ttf */; };
+		13FF69E31A537E26000CD363 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13FF69E21A537E26000CD363 /* QuartzCore.framework */; };
+		D6FE1585C5D6684FD5123A27 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D777EBCACD031E015D9B71FB /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +62,28 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1357CAD41A5CB28C0033FD9A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		13CB7A331A5618A400BD744D /* MatcheeOptionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatcheeOptionsController.h; sourceTree = "<group>"; };
+		13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatcheeOptionsController.m; sourceTree = "<group>"; };
+		13CB7A411A5B283D00BD744D /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
+		13CB7A421A5B283D00BD744D /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
+		13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageData.h; sourceTree = "<group>"; };
+		13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageData.m; sourceTree = "<group>"; };
+		13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
+		13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
+		13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
+		13CB7A4B1A5BBF1800BD744D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		13CB7A4D1A5BBF2400BD744D /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		13CB7A4F1A5BBF4000BD744D /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		13CB7A511A5BBF5C00BD744D /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
+		13D733021A51DF0000D8D11C /* Contacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Contacts.h; sourceTree = "<group>"; };
+		13D733031A51DF0000D8D11C /* Contacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Contacts.m; sourceTree = "<group>"; };
+		13D733051A51F2BC00D8D11C /* MatchesAndPairs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatchesAndPairs.h; sourceTree = "<group>"; };
+		13D733061A51F2BC00D8D11C /* MatchesAndPairs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatchesAndPairs.m; sourceTree = "<group>"; };
+		13D733081A51F50F00D8D11C /* PresentMatchesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PresentMatchesViewController.h; sourceTree = "<group>"; };
+		13D733091A51F51000D8D11C /* PresentMatchesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentMatchesViewController.m; sourceTree = "<group>"; };
+		13D7330B1A52710F00D8D11C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
+		13D7330C1A52710F00D8D11C /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
 		13EE5FAF1A4B4B1E00C72E91 /* Matchflare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchflare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		13EE5FB41A4B4B1E00C72E91 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -53,6 +103,32 @@
 		13EE5FD91A4B4B1E00C72E91 /* MatchflareTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MatchflareTests-Info.plist"; sourceTree = "<group>"; };
 		13EE5FDB1A4B4B1E00C72E91 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		13EE5FDD1A4B4B1E00C72E91 /* MatchflareTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchflareTests.m; sourceTree = "<group>"; };
+		13EE5FE71A4B4C7000C72E91 /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		13EE5FE81A4B4C7000C72E91 /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		13EE5FEA1A4B537200C72E91 /* Global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Global.h; sourceTree = "<group>"; };
+		13EE5FEB1A4B537200C72E91 /* Global.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Global.m; sourceTree = "<group>"; };
+		13EE5FED1A4B53D600C72E91 /* Person.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
+		13EE5FEE1A4B53D600C72E91 /* Person.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
+		13EE5FF01A4B6AF900C72E91 /* Match.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Match.h; sourceTree = "<group>"; };
+		13EE5FF11A4B6AF900C72E91 /* Match.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Match.m; sourceTree = "<group>"; };
+		13EE5FF31A4B6C8F00C72E91 /* Notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Notification.h; sourceTree = "<group>"; };
+		13EE5FF41A4B6C8F00C72E91 /* Notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Notification.m; sourceTree = "<group>"; };
+		13EE5FF61A4B6D2300C72E91 /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessage.h; sourceTree = "<group>"; };
+		13EE5FF71A4B6D2300C72E91 /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessage.m; sourceTree = "<group>"; };
+		13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashPageViewController.h; sourceTree = "<group>"; };
+		13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashPageViewController.m; sourceTree = "<group>"; };
+		13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashPageViewController.xib; sourceTree = "<group>"; };
+		13FF69D61A534D07000CD363 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		13FF69D71A534D07000CD363 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-ExtraBold.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		13FF69D81A534D07000CD363 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Light.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Light.ttf"; sourceTree = "<group>"; };
+		13FF69D91A534D07000CD363 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		13FF69DA1A534D07000CD363 /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
+		13FF69DB1A534D07000CD363 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-SemiboldItalic.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
+		13FF69E21A537E26000CD363 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		13FF69E41A53C0A2000CD363 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		C04A720586133BDF4F5E4667 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D777EBCACD031E015D9B71FB /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2DCD283C0519A1027C5A57B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +136,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13CB7A521A5BBF5C00BD744D /* libresolv.dylib in Frameworks */,
+				13CB7A501A5BBF4000BD744D /* libicucore.dylib in Frameworks */,
+				13CB7A4E1A5BBF2400BD744D /* CFNetwork.framework in Frameworks */,
+				13CB7A4C1A5BBF1800BD744D /* Security.framework in Frameworks */,
+				13FF69E31A537E26000CD363 /* QuartzCore.framework in Frameworks */,
 				13EE5FB51A4B4B1E00C72E91 /* CoreGraphics.framework in Frameworks */,
 				13EE5FB71A4B4B1E00C72E91 /* UIKit.framework in Frameworks */,
 				13EE5FB31A4B4B1E00C72E91 /* Foundation.framework in Frameworks */,
+				D6FE1585C5D6684FD5123A27 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,6 +168,7 @@
 				13EE5FD71A4B4B1E00C72E91 /* MatchflareTests */,
 				13EE5FB11A4B4B1E00C72E91 /* Frameworks */,
 				13EE5FB01A4B4B1E00C72E91 /* Products */,
+				4B17263EB58B2539BFB2F63D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -101,10 +184,18 @@
 		13EE5FB11A4B4B1E00C72E91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1357CAD41A5CB28C0033FD9A /* AddressBook.framework */,
+				13CB7A511A5BBF5C00BD744D /* libresolv.dylib */,
+				13CB7A4F1A5BBF4000BD744D /* libicucore.dylib */,
+				13CB7A4D1A5BBF2400BD744D /* CFNetwork.framework */,
+				13CB7A4B1A5BBF1800BD744D /* Security.framework */,
+				13FF69E41A53C0A2000CD363 /* AudioToolbox.framework */,
+				13FF69E21A537E26000CD363 /* QuartzCore.framework */,
 				13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */,
 				13EE5FB41A4B4B1E00C72E91 /* CoreGraphics.framework */,
 				13EE5FB61A4B4B1E00C72E91 /* UIKit.framework */,
 				13EE5FD11A4B4B1E00C72E91 /* XCTest.framework */,
+				D777EBCACD031E015D9B71FB /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -112,13 +203,27 @@
 		13EE5FB81A4B4B1E00C72E91 /* Matchflare */ = {
 			isa = PBXGroup;
 			children = (
-				13EE5FC11A4B4B1E00C72E91 /* MatchflareAppDelegate.h */,
-				13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */,
+				13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */,
+				13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */,
+				13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */,
 				13EE5FC41A4B4B1E00C72E91 /* Main.storyboard */,
-				13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */,
+				13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */,
+				13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */,
+				13EE5FEB1A4B537200C72E91 /* Global.m */,
+				13EE5FE81A4B4C7000C72E91 /* SplashViewController.m */,
+				13CB7A411A5B283D00BD744D /* ChatViewController.h */,
+				13CB7A421A5B283D00BD744D /* ChatViewController.m */,
+				13D733091A51F51000D8D11C /* PresentMatchesViewController.m */,
 				13EE5FC81A4B4B1E00C72E91 /* MatchflareViewController.m */,
+				13D7330C1A52710F00D8D11C /* RegisterViewController.m */,
+				13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */,
 				13EE5FCA1A4B4B1E00C72E91 /* Images.xcassets */,
 				13EE5FB91A4B4B1E00C72E91 /* Supporting Files */,
+				13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */,
+				13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */,
+				13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */,
+				13D7330B1A52710F00D8D11C /* RegisterViewController.h */,
+				13CB7A331A5618A400BD744D /* MatcheeOptionsController.h */,
 			);
 			path = Matchflare;
 			sourceTree = "<group>";
@@ -126,10 +231,34 @@
 		13EE5FB91A4B4B1E00C72E91 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13EE5FEA1A4B537200C72E91 /* Global.h */,
+				13EE5FE71A4B4C7000C72E91 /* SplashViewController.h */,
+				13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */,
+				13D733081A51F50F00D8D11C /* PresentMatchesViewController.h */,
+				13EE5FED1A4B53D600C72E91 /* Person.h */,
+				13EE5FF01A4B6AF900C72E91 /* Match.h */,
+				13D733021A51DF0000D8D11C /* Contacts.h */,
+				13EE5FF61A4B6D2300C72E91 /* ChatMessage.h */,
+				13EE5FF31A4B6C8F00C72E91 /* Notification.h */,
+				13D733051A51F2BC00D8D11C /* MatchesAndPairs.h */,
+				13EE5FEE1A4B53D600C72E91 /* Person.m */,
+				13EE5FF11A4B6AF900C72E91 /* Match.m */,
+				13D733031A51DF0000D8D11C /* Contacts.m */,
+				13EE5FF71A4B6D2300C72E91 /* ChatMessage.m */,
+				13EE5FF41A4B6C8F00C72E91 /* Notification.m */,
+				13D733061A51F2BC00D8D11C /* MatchesAndPairs.m */,
+				13EE5FC11A4B4B1E00C72E91 /* MatchflareAppDelegate.h */,
+				13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */,
 				13EE5FBA1A4B4B1E00C72E91 /* Matchflare-Info.plist */,
 				13EE5FBB1A4B4B1E00C72E91 /* InfoPlist.strings */,
 				13EE5FBE1A4B4B1E00C72E91 /* main.m */,
 				13EE5FC01A4B4B1E00C72E91 /* Matchflare-Prefix.pch */,
+				13FF69D61A534D07000CD363 /* OpenSans-Bold.ttf */,
+				13FF69D71A534D07000CD363 /* OpenSans-ExtraBold.ttf */,
+				13FF69D81A534D07000CD363 /* OpenSans-Light.ttf */,
+				13FF69D91A534D07000CD363 /* OpenSans-Regular.ttf */,
+				13FF69DA1A534D07000CD363 /* OpenSans-Semibold.ttf */,
+				13FF69DB1A534D07000CD363 /* OpenSans-SemiboldItalic.ttf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -152,6 +281,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4B17263EB58B2539BFB2F63D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C04A720586133BDF4F5E4667 /* Pods.debug.xcconfig */,
+				F2DCD283C0519A1027C5A57B /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -159,9 +297,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13EE5FE11A4B4B1E00C72E91 /* Build configuration list for PBXNativeTarget "Matchflare" */;
 			buildPhases = (
+				5B6E4D56E71D5095198795AA /* Check Pods Manifest.lock */,
 				13EE5FAB1A4B4B1E00C72E91 /* Sources */,
 				13EE5FAC1A4B4B1E00C72E91 /* Frameworks */,
 				13EE5FAD1A4B4B1E00C72E91 /* Resources */,
+				7D34A011282A7C0F28B83786 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -229,6 +369,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13FF69DC1A534DE9000CD363 /* OpenSans-Bold.ttf in Resources */,
+				13FF69DD1A534DE9000CD363 /* OpenSans-ExtraBold.ttf in Resources */,
+				13FF69DE1A534DE9000CD363 /* OpenSans-Light.ttf in Resources */,
+				13FF69DF1A534DE9000CD363 /* OpenSans-Regular.ttf in Resources */,
+				13FF69E01A534DE9000CD363 /* OpenSans-Semibold.ttf in Resources */,
+				13FF69E11A534DE9000CD363 /* OpenSans-SemiboldItalic.ttf in Resources */,
+				13EE60001A4BC7AC00C72E91 /* SplashPageViewController.xib in Resources */,
 				13EE5FCB1A4B4B1E00C72E91 /* Images.xcassets in Resources */,
 				13EE5FBD1A4B4B1E00C72E91 /* InfoPlist.strings in Resources */,
 				13EE5FC61A4B4B1E00C72E91 /* Main.storyboard in Resources */,
@@ -245,14 +392,62 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5B6E4D56E71D5095198795AA /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		7D34A011282A7C0F28B83786 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		13EE5FAB1A4B4B1E00C72E91 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13D7330A1A51F51000D8D11C /* PresentMatchesViewController.m in Sources */,
+				13EE5FF51A4B6C8F00C72E91 /* Notification.m in Sources */,
+				13CB7A351A5618A500BD744D /* MatcheeOptionsController.m in Sources */,
+				13EE5FEF1A4B53D600C72E91 /* Person.m in Sources */,
+				13EE5FFF1A4BC7AC00C72E91 /* SplashPageViewController.m in Sources */,
 				13EE5FBF1A4B4B1E00C72E91 /* main.m in Sources */,
+				13CB7A4A1A5BBDDD00BD744D /* SRWebSocket.m in Sources */,
+				13EE5FF81A4B6D2300C72E91 /* ChatMessage.m in Sources */,
+				13EE5FF21A4B6AF900C72E91 /* Match.m in Sources */,
 				13EE5FC31A4B4B1E00C72E91 /* MatchflareAppDelegate.m in Sources */,
+				13EE5FEC1A4B537200C72E91 /* Global.m in Sources */,
 				13EE5FC91A4B4B1E00C72E91 /* MatchflareViewController.m in Sources */,
+				13EE5FE91A4B4C7000C72E91 /* SplashViewController.m in Sources */,
+				13D7330D1A52710F00D8D11C /* RegisterViewController.m in Sources */,
+				13CB7A461A5B2C1A00BD744D /* ChatMessageData.m in Sources */,
+				13D733041A51DF0000D8D11C /* Contacts.m in Sources */,
+				13CB7A431A5B283D00BD744D /* ChatViewController.m in Sources */,
+				13D733071A51F2BC00D8D11C /* MatchesAndPairs.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,26 +569,38 @@
 		};
 		13EE5FE21A4B4B1E00C72E91 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C04A720586133BDF4F5E4667 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/piyushpoddar/Downloads,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		13EE5FE31A4B4B1E00C72E91 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F2DCD283C0519A1027C5A57B /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/piyushpoddar/Downloads,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -457,6 +664,7 @@
 				13EE5FE31A4B4B1E00C72E91 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		13EE5FE41A4B4B1E00C72E91 /* Build configuration list for PBXNativeTarget "MatchflareTests" */ = {
 			isa = XCConfigurationList;
@@ -465,6 +673,7 @@
 				13EE5FE61A4B4B1E00C72E91 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

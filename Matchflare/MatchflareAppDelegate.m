@@ -7,11 +7,14 @@
 //
 
 #import "MatchflareAppDelegate.h"
+#import "AFNetworkActivityLogger.h"
 
 @implementation MatchflareAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     // Override point for customization after application launch.
     return YES;
 }
