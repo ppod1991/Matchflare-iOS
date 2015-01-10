@@ -45,7 +45,7 @@ static NSString *baseURL = @"http://matchflare.herokuapp.com/";
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithArray:@[@"text/html",@"application/json"]];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithArray:@[@"text/html",@"application/json",@"text/plain"]];
 
     
     NSString* urlString = [baseURL stringByAppendingString:path];
@@ -63,11 +63,17 @@ static NSString *urlEncode(id object) {
     return [string stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
 }
 
++ (NSString *) getDeviceId {
+    UIDevice *device = [UIDevice currentDevice];
+    
+    return [[device identifierForVendor]UUIDString];
+};
 
 + (Global*) getInstance {
     @synchronized(self) {
         if (instance==nil) {
             instance = [Global new];
+            instance.thisUser = [[Person alloc] init];
         }
     }
     return instance;

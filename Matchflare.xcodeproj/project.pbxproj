@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13CB7A351A5618A500BD744D /* MatcheeOptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */; };
+		130904271A5F658E00235ED0 /* NotificationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904261A5F658E00235ED0 /* NotificationTableViewController.m */; };
+		1309042A1A5F68F200235ED0 /* NotificationLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904291A5F68F200235ED0 /* NotificationLists.m */; };
+		1363371C1A5DECFE002BCBE2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */; };
+		139750E51A606AF0002C0EAC /* EvaluateMatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */; };
+		139750E81A607C1A002C0EAC /* ViewMatchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E71A607C1A002C0EAC /* ViewMatchController.m */; };
 		13CB7A431A5B283D00BD744D /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A421A5B283D00BD744D /* ChatViewController.m */; };
 		13CB7A461A5B2C1A00BD744D /* ChatMessageData.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */; };
 		13CB7A4A1A5BBDDD00BD744D /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */; };
@@ -19,6 +23,7 @@
 		13D733071A51F2BC00D8D11C /* MatchesAndPairs.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D733061A51F2BC00D8D11C /* MatchesAndPairs.m */; };
 		13D7330A1A51F51000D8D11C /* PresentMatchesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D733091A51F51000D8D11C /* PresentMatchesViewController.m */; };
 		13D7330D1A52710F00D8D11C /* RegisterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13D7330C1A52710F00D8D11C /* RegisterViewController.m */; };
+		13E300061A5DC269008552A4 /* ProfilePictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13E300051A5DC269008552A4 /* ProfilePictureViewController.m */; };
 		13EE5FB31A4B4B1E00C72E91 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */; };
 		13EE5FB51A4B4B1E00C72E91 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB41A4B4B1E00C72E91 /* CoreGraphics.framework */; };
 		13EE5FB71A4B4B1E00C72E91 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB61A4B4B1E00C72E91 /* UIKit.framework */; };
@@ -41,6 +46,24 @@
 		13EE5FF81A4B6D2300C72E91 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FF71A4B6D2300C72E91 /* ChatMessage.m */; };
 		13EE5FFF1A4BC7AC00C72E91 /* SplashPageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */; };
 		13EE60001A4BC7AC00C72E91 /* SplashPageViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */; };
+		13F631651A5F06D80070399C /* MatcheeOptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F631641A5F06D80070399C /* MatcheeOptionsViewController.m */; };
+		13F9202C1A5DCB2D0089A92A /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F9202B1A5DCB2D0089A92A /* libsqlite3.0.dylib */; };
+		13F9202E1A5DCB370089A92A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 13F9202D1A5DCB370089A92A /* libz.dylib */; };
+		13F920801A5DCF380089A92A /* autoscaling-2011-01-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920711A5DCF380089A92A /* autoscaling-2011-01-01.json */; };
+		13F920811A5DCF380089A92A /* cognito-identity-2014-06-30.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920721A5DCF380089A92A /* cognito-identity-2014-06-30.json */; };
+		13F920821A5DCF380089A92A /* dynamodb-2012-08-10.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920731A5DCF380089A92A /* dynamodb-2012-08-10.json */; };
+		13F920831A5DCF380089A92A /* ec2-2014-09-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920741A5DCF380089A92A /* ec2-2014-09-01.json */; };
+		13F920841A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920751A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json */; };
+		13F920851A5DCF380089A92A /* email-2010-12-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920761A5DCF380089A92A /* email-2010-12-01.json */; };
+		13F920861A5DCF380089A92A /* kinesis-2013-12-02.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920771A5DCF380089A92A /* kinesis-2013-12-02.json */; };
+		13F920871A5DCF380089A92A /* mobileanalytics-2014-06-30.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920781A5DCF380089A92A /* mobileanalytics-2014-06-30.json */; };
+		13F920881A5DCF380089A92A /* monitoring-2010-08-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F920791A5DCF380089A92A /* monitoring-2010-08-01.json */; };
+		13F920891A5DCF380089A92A /* s3-2006-03-01.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207A1A5DCF380089A92A /* s3-2006-03-01.json */; };
+		13F9208A1A5DCF380089A92A /* sdb-2009-04-15.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207B1A5DCF380089A92A /* sdb-2009-04-15.json */; };
+		13F9208B1A5DCF380089A92A /* sns-2010-03-31.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207C1A5DCF380089A92A /* sns-2010-03-31.json */; };
+		13F9208C1A5DCF380089A92A /* sqs-2012-11-05.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207D1A5DCF380089A92A /* sqs-2012-11-05.json */; };
+		13F9208D1A5DCF380089A92A /* sts-2011-06-15.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207E1A5DCF380089A92A /* sts-2011-06-15.json */; };
+		13F9208E1A5DCF380089A92A /* css-2014-06-30.json in Resources */ = {isa = PBXBuildFile; fileRef = 13F9207F1A5DCF380089A92A /* css-2014-06-30.json */; };
 		13FF69DC1A534DE9000CD363 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D61A534D07000CD363 /* OpenSans-Bold.ttf */; };
 		13FF69DD1A534DE9000CD363 /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D71A534D07000CD363 /* OpenSans-ExtraBold.ttf */; };
 		13FF69DE1A534DE9000CD363 /* OpenSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 13FF69D81A534D07000CD363 /* OpenSans-Light.ttf */; };
@@ -62,9 +85,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		130904251A5F658E00235ED0 /* NotificationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationTableViewController.h; sourceTree = "<group>"; };
+		130904261A5F658E00235ED0 /* NotificationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewController.m; sourceTree = "<group>"; };
+		130904281A5F68F200235ED0 /* NotificationLists.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationLists.h; sourceTree = "<group>"; };
+		130904291A5F68F200235ED0 /* NotificationLists.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationLists.m; sourceTree = "<group>"; };
 		1357CAD41A5CB28C0033FD9A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
-		13CB7A331A5618A400BD744D /* MatcheeOptionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatcheeOptionsController.h; sourceTree = "<group>"; };
-		13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatcheeOptionsController.m; sourceTree = "<group>"; };
+		1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluateMatchViewController.h; sourceTree = "<group>"; };
+		139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluateMatchViewController.m; sourceTree = "<group>"; };
+		139750E61A607C1A002C0EAC /* ViewMatchController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewMatchController.h; sourceTree = "<group>"; };
+		139750E71A607C1A002C0EAC /* ViewMatchController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewMatchController.m; sourceTree = "<group>"; };
 		13CB7A411A5B283D00BD744D /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatViewController.h; sourceTree = "<group>"; };
 		13CB7A421A5B283D00BD744D /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatViewController.m; sourceTree = "<group>"; };
 		13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageData.h; sourceTree = "<group>"; };
@@ -84,6 +114,8 @@
 		13D733091A51F51000D8D11C /* PresentMatchesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PresentMatchesViewController.m; sourceTree = "<group>"; };
 		13D7330B1A52710F00D8D11C /* RegisterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegisterViewController.h; sourceTree = "<group>"; };
 		13D7330C1A52710F00D8D11C /* RegisterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegisterViewController.m; sourceTree = "<group>"; };
+		13E300041A5DC269008552A4 /* ProfilePictureViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfilePictureViewController.h; sourceTree = "<group>"; };
+		13E300051A5DC269008552A4 /* ProfilePictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfilePictureViewController.m; sourceTree = "<group>"; };
 		13EE5FAF1A4B4B1E00C72E91 /* Matchflare.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchflare.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		13EE5FB41A4B4B1E00C72E91 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -118,6 +150,25 @@
 		13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashPageViewController.h; sourceTree = "<group>"; };
 		13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashPageViewController.m; sourceTree = "<group>"; };
 		13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashPageViewController.xib; sourceTree = "<group>"; };
+		13F631631A5F06D80070399C /* MatcheeOptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MatcheeOptionsViewController.h; sourceTree = "<group>"; };
+		13F631641A5F06D80070399C /* MatcheeOptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MatcheeOptionsViewController.m; sourceTree = "<group>"; };
+		13F9202B1A5DCB2D0089A92A /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		13F9202D1A5DCB370089A92A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
+		13F920711A5DCF380089A92A /* autoscaling-2011-01-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "autoscaling-2011-01-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/autoscaling-2011-01-01.json"; sourceTree = "<group>"; };
+		13F920721A5DCF380089A92A /* cognito-identity-2014-06-30.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "cognito-identity-2014-06-30.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/cognito-identity-2014-06-30.json"; sourceTree = "<group>"; };
+		13F920731A5DCF380089A92A /* dynamodb-2012-08-10.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "dynamodb-2012-08-10.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/dynamodb-2012-08-10.json"; sourceTree = "<group>"; };
+		13F920741A5DCF380089A92A /* ec2-2014-09-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "ec2-2014-09-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/ec2-2014-09-01.json"; sourceTree = "<group>"; };
+		13F920751A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "elasticloadbalancing-2012-06-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/elasticloadbalancing-2012-06-01.json"; sourceTree = "<group>"; };
+		13F920761A5DCF380089A92A /* email-2010-12-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "email-2010-12-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/email-2010-12-01.json"; sourceTree = "<group>"; };
+		13F920771A5DCF380089A92A /* kinesis-2013-12-02.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "kinesis-2013-12-02.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/kinesis-2013-12-02.json"; sourceTree = "<group>"; };
+		13F920781A5DCF380089A92A /* mobileanalytics-2014-06-30.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "mobileanalytics-2014-06-30.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/mobileanalytics-2014-06-30.json"; sourceTree = "<group>"; };
+		13F920791A5DCF380089A92A /* monitoring-2010-08-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "monitoring-2010-08-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/monitoring-2010-08-01.json"; sourceTree = "<group>"; };
+		13F9207A1A5DCF380089A92A /* s3-2006-03-01.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "s3-2006-03-01.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/s3-2006-03-01.json"; sourceTree = "<group>"; };
+		13F9207B1A5DCF380089A92A /* sdb-2009-04-15.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sdb-2009-04-15.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/sdb-2009-04-15.json"; sourceTree = "<group>"; };
+		13F9207C1A5DCF380089A92A /* sns-2010-03-31.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sns-2010-03-31.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/sns-2010-03-31.json"; sourceTree = "<group>"; };
+		13F9207D1A5DCF380089A92A /* sqs-2012-11-05.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sqs-2012-11-05.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/sqs-2012-11-05.json"; sourceTree = "<group>"; };
+		13F9207E1A5DCF380089A92A /* sts-2011-06-15.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "sts-2011-06-15.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/sts-2011-06-15.json"; sourceTree = "<group>"; };
+		13F9207F1A5DCF380089A92A /* css-2014-06-30.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "css-2014-06-30.json"; path = "../../../../../Downloads/aws-ios-sdk-2.0.13 2/service-definitions/css-2014-06-30.json"; sourceTree = "<group>"; };
 		13FF69D61A534D07000CD363 /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
 		13FF69D71A534D07000CD363 /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-ExtraBold.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		13FF69D81A534D07000CD363 /* OpenSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "OpenSans-Light.ttf"; path = "../../../../Learning Swift/Taste/Taste/OpenSans-Light.ttf"; sourceTree = "<group>"; };
@@ -136,6 +187,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1363371C1A5DECFE002BCBE2 /* MobileCoreServices.framework in Frameworks */,
+				13F9202E1A5DCB370089A92A /* libz.dylib in Frameworks */,
+				13F9202C1A5DCB2D0089A92A /* libsqlite3.0.dylib in Frameworks */,
 				13CB7A521A5BBF5C00BD744D /* libresolv.dylib in Frameworks */,
 				13CB7A501A5BBF4000BD744D /* libicucore.dylib in Frameworks */,
 				13CB7A4E1A5BBF2400BD744D /* CFNetwork.framework in Frameworks */,
@@ -184,6 +238,9 @@
 		13EE5FB11A4B4B1E00C72E91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */,
+				13F9202D1A5DCB370089A92A /* libz.dylib */,
+				13F9202B1A5DCB2D0089A92A /* libsqlite3.0.dylib */,
 				1357CAD41A5CB28C0033FD9A /* AddressBook.framework */,
 				13CB7A511A5BBF5C00BD744D /* libresolv.dylib */,
 				13CB7A4F1A5BBF4000BD744D /* libicucore.dylib */,
@@ -203,27 +260,35 @@
 		13EE5FB81A4B4B1E00C72E91 /* Matchflare */ = {
 			isa = PBXGroup;
 			children = (
-				13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */,
-				13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */,
-				13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */,
 				13EE5FC41A4B4B1E00C72E91 /* Main.storyboard */,
-				13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */,
+				130904251A5F658E00235ED0 /* NotificationTableViewController.h */,
+				139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */,
+				139750E61A607C1A002C0EAC /* ViewMatchController.h */,
+				139750E71A607C1A002C0EAC /* ViewMatchController.m */,
+				139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */,
+				130904261A5F658E00235ED0 /* NotificationTableViewController.m */,
+				13F631631A5F06D80070399C /* MatcheeOptionsViewController.h */,
+				13F631641A5F06D80070399C /* MatcheeOptionsViewController.m */,
 				13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */,
 				13EE5FEB1A4B537200C72E91 /* Global.m */,
 				13EE5FE81A4B4C7000C72E91 /* SplashViewController.m */,
-				13CB7A411A5B283D00BD744D /* ChatViewController.h */,
 				13CB7A421A5B283D00BD744D /* ChatViewController.m */,
+				13E300051A5DC269008552A4 /* ProfilePictureViewController.m */,
 				13D733091A51F51000D8D11C /* PresentMatchesViewController.m */,
 				13EE5FC81A4B4B1E00C72E91 /* MatchflareViewController.m */,
 				13D7330C1A52710F00D8D11C /* RegisterViewController.m */,
-				13CB7A341A5618A500BD744D /* MatcheeOptionsController.m */,
 				13EE5FCA1A4B4B1E00C72E91 /* Images.xcassets */,
 				13EE5FB91A4B4B1E00C72E91 /* Supporting Files */,
 				13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */,
+				13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */,
+				13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */,
+				13CB7A411A5B283D00BD744D /* ChatViewController.h */,
+				13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */,
+				13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */,
+				13E300041A5DC269008552A4 /* ProfilePictureViewController.h */,
 				13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */,
 				13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */,
 				13D7330B1A52710F00D8D11C /* RegisterViewController.h */,
-				13CB7A331A5618A400BD744D /* MatcheeOptionsController.h */,
 			);
 			path = Matchflare;
 			sourceTree = "<group>";
@@ -231,6 +296,21 @@
 		13EE5FB91A4B4B1E00C72E91 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13F920711A5DCF380089A92A /* autoscaling-2011-01-01.json */,
+				13F920721A5DCF380089A92A /* cognito-identity-2014-06-30.json */,
+				13F920731A5DCF380089A92A /* dynamodb-2012-08-10.json */,
+				13F920741A5DCF380089A92A /* ec2-2014-09-01.json */,
+				13F920751A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json */,
+				13F920761A5DCF380089A92A /* email-2010-12-01.json */,
+				13F920771A5DCF380089A92A /* kinesis-2013-12-02.json */,
+				13F920781A5DCF380089A92A /* mobileanalytics-2014-06-30.json */,
+				13F920791A5DCF380089A92A /* monitoring-2010-08-01.json */,
+				13F9207A1A5DCF380089A92A /* s3-2006-03-01.json */,
+				13F9207B1A5DCF380089A92A /* sdb-2009-04-15.json */,
+				13F9207C1A5DCF380089A92A /* sns-2010-03-31.json */,
+				13F9207D1A5DCF380089A92A /* sqs-2012-11-05.json */,
+				13F9207E1A5DCF380089A92A /* sts-2011-06-15.json */,
+				13F9207F1A5DCF380089A92A /* css-2014-06-30.json */,
 				13EE5FEA1A4B537200C72E91 /* Global.h */,
 				13EE5FE71A4B4C7000C72E91 /* SplashViewController.h */,
 				13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */,
@@ -241,6 +321,8 @@
 				13EE5FF61A4B6D2300C72E91 /* ChatMessage.h */,
 				13EE5FF31A4B6C8F00C72E91 /* Notification.h */,
 				13D733051A51F2BC00D8D11C /* MatchesAndPairs.h */,
+				130904281A5F68F200235ED0 /* NotificationLists.h */,
+				130904291A5F68F200235ED0 /* NotificationLists.m */,
 				13EE5FEE1A4B53D600C72E91 /* Person.m */,
 				13EE5FF11A4B6AF900C72E91 /* Match.m */,
 				13D733031A51DF0000D8D11C /* Contacts.m */,
@@ -370,15 +452,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				13FF69DC1A534DE9000CD363 /* OpenSans-Bold.ttf in Resources */,
+				13F9208C1A5DCF380089A92A /* sqs-2012-11-05.json in Resources */,
 				13FF69DD1A534DE9000CD363 /* OpenSans-ExtraBold.ttf in Resources */,
 				13FF69DE1A534DE9000CD363 /* OpenSans-Light.ttf in Resources */,
+				13F920891A5DCF380089A92A /* s3-2006-03-01.json in Resources */,
+				13F920851A5DCF380089A92A /* email-2010-12-01.json in Resources */,
 				13FF69DF1A534DE9000CD363 /* OpenSans-Regular.ttf in Resources */,
+				13F9208B1A5DCF380089A92A /* sns-2010-03-31.json in Resources */,
+				13F920821A5DCF380089A92A /* dynamodb-2012-08-10.json in Resources */,
+				13F920861A5DCF380089A92A /* kinesis-2013-12-02.json in Resources */,
 				13FF69E01A534DE9000CD363 /* OpenSans-Semibold.ttf in Resources */,
+				13F920871A5DCF380089A92A /* mobileanalytics-2014-06-30.json in Resources */,
+				13F9208E1A5DCF380089A92A /* css-2014-06-30.json in Resources */,
+				13F9208D1A5DCF380089A92A /* sts-2011-06-15.json in Resources */,
 				13FF69E11A534DE9000CD363 /* OpenSans-SemiboldItalic.ttf in Resources */,
+				13F920841A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json in Resources */,
+				13F9208A1A5DCF380089A92A /* sdb-2009-04-15.json in Resources */,
 				13EE60001A4BC7AC00C72E91 /* SplashPageViewController.xib in Resources */,
 				13EE5FCB1A4B4B1E00C72E91 /* Images.xcassets in Resources */,
+				13F920881A5DCF380089A92A /* monitoring-2010-08-01.json in Resources */,
+				13F920801A5DCF380089A92A /* autoscaling-2011-01-01.json in Resources */,
 				13EE5FBD1A4B4B1E00C72E91 /* InfoPlist.strings in Resources */,
+				13F920811A5DCF380089A92A /* cognito-identity-2014-06-30.json in Resources */,
 				13EE5FC61A4B4B1E00C72E91 /* Main.storyboard in Resources */,
+				13F920831A5DCF380089A92A /* ec2-2014-09-01.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,14 +529,19 @@
 			files = (
 				13D7330A1A51F51000D8D11C /* PresentMatchesViewController.m in Sources */,
 				13EE5FF51A4B6C8F00C72E91 /* Notification.m in Sources */,
-				13CB7A351A5618A500BD744D /* MatcheeOptionsController.m in Sources */,
+				1309042A1A5F68F200235ED0 /* NotificationLists.m in Sources */,
 				13EE5FEF1A4B53D600C72E91 /* Person.m in Sources */,
 				13EE5FFF1A4BC7AC00C72E91 /* SplashPageViewController.m in Sources */,
+				139750E51A606AF0002C0EAC /* EvaluateMatchViewController.m in Sources */,
+				13E300061A5DC269008552A4 /* ProfilePictureViewController.m in Sources */,
 				13EE5FBF1A4B4B1E00C72E91 /* main.m in Sources */,
+				130904271A5F658E00235ED0 /* NotificationTableViewController.m in Sources */,
 				13CB7A4A1A5BBDDD00BD744D /* SRWebSocket.m in Sources */,
+				139750E81A607C1A002C0EAC /* ViewMatchController.m in Sources */,
 				13EE5FF81A4B6D2300C72E91 /* ChatMessage.m in Sources */,
 				13EE5FF21A4B6AF900C72E91 /* Match.m in Sources */,
 				13EE5FC31A4B4B1E00C72E91 /* MatchflareAppDelegate.m in Sources */,
+				13F631651A5F06D80070399C /* MatcheeOptionsViewController.m in Sources */,
 				13EE5FEC1A4B537200C72E91 /* Global.m in Sources */,
 				13EE5FC91A4B4B1E00C72E91 /* MatchflareViewController.m in Sources */,
 				13EE5FE91A4B4C7000C72E91 /* SplashViewController.m in Sources */,
@@ -573,10 +675,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/piyushpoddar/Downloads,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
@@ -592,10 +691,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/piyushpoddar/Downloads,
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";

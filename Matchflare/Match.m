@@ -22,4 +22,8 @@
     return YES;
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"%@ and %@",self.first_matchee.guessed_full_name,self.second_matchee.guessed_full_name];
+}
+
 @end

@@ -153,12 +153,11 @@
         CFArrayRef allPeople = ABAddressBookCopyArrayOfAllPeopleInSource(addressBook, source);
         //CFIndex nPeople = ABAddressBookGetPersonCount(addressBook);
         CFIndex nPeople = CFArrayGetCount(allPeople);
-        NSMutableArray<Person> *contactObjects = (NSMutableArray<Person> *)[NSMutableArray arrayWithCapacity:nPeople];
+        __block NSMutableArray<Person> *contactObjects = (NSMutableArray<Person> *)[NSMutableArray arrayWithCapacity:nPeople];
 
         for (int i = 0; i < nPeople; i++)
         {
             Person *thisPerson = [[Person alloc] init];
-            
             ABRecordRef person = CFArrayGetValueAtIndex(allPeople, i);
             if (person == nil) {
                 break;
@@ -241,7 +240,7 @@
         //////////////
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Make Matches"
+        __block UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Cannot Make Matches"
                                                         message:@"Must enable 'Contacts' for Matchflare in your general Phone settings."
                                                        delegate:nil
                                               cancelButtonTitle:@"OK"
@@ -257,7 +256,7 @@
 }
 
 - (void) processContacts:(NSMutableArray <Person> *) mContacts {
-    Global *global = [Global getInstance];
+    __block Global *global = [Global getInstance];
     NSDictionary *options;
     void (^successBlock) (NSURLSessionDataTask *operation, id responseObject);
     
@@ -286,6 +285,7 @@
             }
             else {
                 global.thisUser.contact_objects = matchesAndPairs.contact_objects;
+                global.thisUser.contact_id = [NSNumber numberWithInt: 262]; //TO BE REMOVED CHANGE ADDED NEEDS TO BE IMPLEMENTED
                 self.matches = matchesAndPairs.matches;
                 self.finishedProcessingContacts = true;
                 if (self.toPresentMatches) {

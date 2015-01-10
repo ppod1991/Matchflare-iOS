@@ -15,6 +15,7 @@
 
 + (Global*) getInstance;
 - (NSString*) accessToken;
++ (NSString *) getDeviceId;
 - (BOOL) setAccessToken:(NSString *) mAccessToken;
 + (void) postTo:(NSString *) path withParams:(NSDictionary *) params withBody:(id) body success:(void (^)(NSURLSessionDataTask *__strong, __strong id)) success failure:(void (^)(NSURLSessionDataTask *__strong, NSError *__strong)) failure;
 

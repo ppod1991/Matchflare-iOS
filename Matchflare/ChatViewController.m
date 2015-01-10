@@ -22,7 +22,7 @@
 @implementation ChatViewController
 
 - (void) viewWillAppear:(BOOL)animated {
-    
+    [super viewWillAppear:animated];
     NSString *urlString = @"ws://matchflare.herokuapp.com/liveChat";
     self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urlString]];
     self.webSocket.delegate = self;
@@ -184,6 +184,7 @@
 }
 
 - (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
     [_webSocket closeWithCode:1000 reason:nil];
     NSLog(@"Closing web socket!");
 }
@@ -193,12 +194,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    //TO CHANGE
-    self.contact_id = 238;
-    self.pair_id = 613;
-    self.chat_id = 917;
-    
+    //TO CHANGE 
     Global *global = [Global getInstance];
+    self.contact_id = global.thisUser.contact_id.intValue; //238;
+    
+    
+    if (!self.pair_id || !self.chat_id) {
+        self.pair_id = 613;
+        self.chat_id = 917;
+    }
+
+    
+    
     //self.senderId = [NSString stringWithFormat:@"%d", global.thisUser.contact_id.intValue];
     self.senderId = [NSString stringWithFormat:@"%d", self.contact_id];
     self.senderDisplayName = @"Me";

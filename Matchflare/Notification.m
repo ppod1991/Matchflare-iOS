@@ -15,4 +15,8 @@
     return YES;
 }
 
+- (NSString *)description {
+    return self.push_message;
+}
+
 @end

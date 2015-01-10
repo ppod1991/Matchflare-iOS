@@ -9,6 +9,7 @@
 #import "PresentMatchesViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "MatcheeOptionsViewController.h"
 
 @interface PresentMatchesViewController()
 
@@ -16,11 +17,45 @@
 @property (strong, nonatomic) CATransition *returnAnimation;
 @property (strong, nonatomic) CATransition *quickAnimation;
 @property (strong, nonatomic) NSString *currentDescription;
-
+@property BOOL isFirst; //For long press--determines whether first or second matchee was long pressed
 @property int initialX;
 @end
 
 @implementation PresentMatchesViewController
+
+- (IBAction) choseNewMatchee:(UIStoryboardSegue *) segue {
+    if ([segue.identifier isEqualToString:@"ChoseToPresent"]) {
+        if ([segue.sourceViewController isKindOfClass:[MatcheeOptionsViewController class]]) {
+            MatcheeOptionsViewController *mvc = segue.sourceViewController;
+            if (mvc.isFirstMatchee) {
+                self.currentMatch.first_matchee = mvc.chosenMatchee;
+            }
+            else {
+                self.currentMatch.second_matchee = mvc.chosenMatchee;
+            }
+            
+            if ([self.currentView isEqual:self.matchOne]) {
+                [self loadMatch:self.currentMatch isFirstView:YES];
+            }
+            else if ([self.currentView isEqual:self.matchTwo]) {
+                [self loadMatch:self.currentMatch isFirstView:NO];
+
+            }
+
+        }
+    }
+}
+
+- (IBAction) blockedMatchee:(UIStoryboardSegue *) segue {
+    if ([segue.identifier isEqualToString:@"BlockToPresent"]) {
+        if ([segue.sourceViewController isKindOfClass:[MatcheeOptionsViewController class]]) {
+            MatcheeOptionsViewController *mvc = segue.sourceViewController;
+            NSLog([NSString stringWithFormat:@"Simulated--NOT showing %@ anymore",mvc.existingMatchee.guessed_full_name]);
+            [self presentNextMatch:true];
+            //NEED TO IMPLEMENT -- Post request to stop showing this matchee
+        }
+    }
+}
 
 
 - (IBAction)didPanFirst:(UIPanGestureRecognizer *)sender {
@@ -182,6 +217,7 @@
         NSLog(@"First long long");
         self.firstMatcheeName.textColor = [UIColor whiteColor];
         self.nextFirstMatcheeName.textColor = [UIColor whiteColor];
+        self.isFirst = YES;
         [self showMatcheeOptions];
     }
 }
@@ -192,36 +228,38 @@
         NSLog(@"Second long long");
         self.secondMatcheeName.textColor = [UIColor whiteColor];
         self.nextSecondMatcheeName.textColor = [UIColor whiteColor];
+        self.isFirst = NO;
         [self showMatcheeOptions];
     }
 }
 
 - (void) showMatcheeOptions {
-    UIAlertController *alertController = [UIAlertController
-                                          alertControllerWithTitle:@"Ayo"
-                                          message:@"woo"
-                                          preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction *cancelAction = [UIAlertAction
-                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
-                                   style:UIAlertActionStyleCancel
-                                   handler:^(UIAlertAction *action)
-                                   {
-                                       NSLog(@"Cancel action");
-                                   }];
-    
-    UIAlertAction *okAction = [UIAlertAction
-                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-                               style:UIAlertActionStyleDefault
-                               handler:^(UIAlertAction *action)
-                               {
-                                   NSLog(@"OK action");
-                               }];
-    
-    [alertController addAction:cancelAction];
-    [alertController addAction:okAction];
-    
-    [self presentViewController:alertController animated:YES completion:nil];
+    [self performSegueWithIdentifier:@"PresentToOptions" sender:self];
+//    UIAlertController *alertController = [UIAlertController
+//                                          alertControllerWithTitle:@"Ayo"
+//                                          message:@"woo"
+//                                          preferredStyle:UIAlertControllerStyleAlert];
+//    
+//    UIAlertAction *cancelAction = [UIAlertAction
+//                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
+//                                   style:UIAlertActionStyleCancel
+//                                   handler:^(UIAlertAction *action)
+//                                   {
+//                                       NSLog(@"Cancel action");
+//                                   }];
+//    
+//    UIAlertAction *okAction = [UIAlertAction
+//                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
+//                               style:UIAlertActionStyleDefault
+//                               handler:^(UIAlertAction *action)
+//                               {
+//                                   NSLog(@"OK action");
+//                               }];
+//    
+//    [alertController addAction:cancelAction];
+//    [alertController addAction:okAction];
+//    
+//    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void) passTriggered {
@@ -273,6 +311,7 @@
 };
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
     //Change fonts + other styling
     self.firstMatcheeName.font = [UIFont fontWithName:@"OpenSans-Light" size:26.0];
     self.secondMatcheeName.font = [UIFont fontWithName:@"OpenSans-Light" size:26.0];
@@ -450,6 +489,8 @@
 }
 
 - (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
     if (self.matches) {
         //Has matches ready to show
         if (!self.currentMatch) {
@@ -504,6 +545,22 @@
     //NEED TO IMPLMENT -- IF MATCHES IS < 10, then load more matches
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"PresentToOptions"]) {
+        if ([segue.destinationViewController isKindOfClass:[MatcheeOptionsViewController class]]) {
+            MatcheeOptionsViewController *mvc = [segue destinationViewController];
+            mvc.isFirstMatchee = self.isFirst;
+            if (self.isFirst) {
+                mvc.existingMatchee = self.currentMatch.first_matchee;
+            }
+            else {
+                mvc.existingMatchee = self.currentMatch.second_matchee;
+            }
+        }
+    }
+}
+
+
 - (void) loadMatch:(Match*) theMatch isFirstView: (BOOL) isFirstView {
     
     if (isFirstView) {
@@ -514,10 +571,8 @@
         [self.firstMatcheeImage sd_cancelCurrentImageLoad];
         [self.firstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:nil];
 
-        
-         [self.secondMatcheeImage sd_cancelCurrentImageLoad];
-         [self.secondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:nil];
-        
+        [self.secondMatcheeImage sd_cancelCurrentImageLoad];
+        [self.secondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:nil];
         
         [self.view bringSubviewToFront:self.firstMatcheeName];
         [self.view bringSubviewToFront:self.secondMatcheeName];
@@ -526,26 +581,12 @@
         self.nextFirstMatcheeName.text = theMatch.first_matchee.guessed_full_name;
         self.nextSecondMatcheeName.text = theMatch.second_matchee.guessed_full_name;
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString *imgURL = theMatch.first_matchee.image_url;
-            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgURL]];
-            
-            //set your image on main thread.
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.nextFirstMatcheeImage setImage:[UIImage imageWithData:data]];
-                
-            });
-        });
+        [self.nextFirstMatcheeImage sd_cancelCurrentImageLoad];
+        [self.nextFirstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:nil];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString *imgURL = theMatch.second_matchee.image_url;
-            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imgURL]];
-            
-            //set your image on main thread.
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.nextSecondMatcheeImage setImage:[UIImage imageWithData:data]];
-            });
-        });
+        
+        [self.nextSecondMatcheeImage sd_cancelCurrentImageLoad];
+        [self.nextSecondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:nil];
         
         [self.view bringSubviewToFront:self.nextFirstMatcheeName];
         [self.view bringSubviewToFront:self.nextSecondMatcheeName];

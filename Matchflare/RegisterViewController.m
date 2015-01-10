@@ -7,6 +7,9 @@
 //
 
 #import "RegisterViewController.h"
+#import "ProfilePictureViewController.h"
+#import <QuartzCore/QuartzCore.h>
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface RegisterViewController()
 @property (strong, nonatomic) IBOutlet UIView *phoneNumberView;
@@ -50,6 +53,7 @@
 @implementation RegisterViewController
 
 - (void) viewDidLoad {
+    [super viewDidLoad];
     self.phoneNumberField.font = [UIFont fontWithName:@"Opensans-Light" size:20.0];
     self.sendSMSButton.titleLabel.font = [UIFont fontWithName:@"Opensans-Light" size:22.0];
     [self.sendSMSButton sizeToFit];
@@ -150,6 +154,16 @@
 - (IBAction)nextCodePressed:(id)sender {
     [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
     [self.phoneNumberField becomeFirstResponder];
+}
+
+- (IBAction) chosePicture:(UIStoryboardSegue *) segue {
+    if ([segue.identifier isEqualToString:@"PictureToRegister"]) {
+        if ([segue.sourceViewController isKindOfClass:[ProfilePictureViewController class]]) {
+            
+            [self.profileThumbnail sd_cancelCurrentImageLoad];
+            [self.profileThumbnail sd_setImageWithURL:[NSURL URLWithString:self.imageURL] placeholderImage:nil];
+        }
+    }
 }
 
 @end
