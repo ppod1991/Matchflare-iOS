@@ -15,8 +15,10 @@
 #import "Contacts.h"
 #import "MatchesAndPairs.h"
 #import "PresentMatchesViewController.h"
+#import "MatchflareAppDelegate.h"
 
 @interface SplashViewController ()
+@property (strong, nonatomic) IBOutlet UIView *spashImage;
 
 @end
 
@@ -35,6 +37,9 @@
         if (self.finishedProcessingContacts) {
             [self performSegueWithIdentifier:@"SplashToNavigation" sender:self];
         }
+        else {
+            [Global startProgress];
+        }
         NSLog(@"Going to present matches");
     }
 
@@ -46,6 +51,9 @@
     self.toRegister = true;
     if (self.finishedProcessingContacts) {
         [self performSegueWithIdentifier:@"SplashToRegister" sender:self];
+    }
+    else {
+        [Global startProgress];
     }
 
 }
@@ -73,6 +81,7 @@
     [super viewDidLoad];
     
     
+    
     //Change fonts
     self.nextButton.titleLabel.font = [UIFont fontWithName:@"OpenSans-Light" size:15.0];
     self.registerButton.titleLabel.font = [UIFont fontWithName:@"OpenSans-Light" size:15.0];
@@ -98,7 +107,7 @@
     [[self view] addSubview:[self.pageController view]];
     [self.pageController didMoveToParentViewController:self];
 
-
+    [self.view bringSubviewToFront:self.spashImage];
     //--End Page View Initialization
     
     // Do any additional setup after loading the view.
@@ -215,10 +224,11 @@
                     if ((BOOL) responseObject) {
                         NSLog(@"Successfully verified access token: %@", [responseObject description]);
                         global.thisUser = [[Person alloc] initWithDictionary:responseObject error:&err];
+                        [global registerForPushNotifications];
                     }
                     else {
                         NSLog(@"Failed verification test of access token: %@", [responseObject description]);
-                        
+                        self.spashImage.hidden = YES;
                     }
                     [self processContacts:contactObjects];
                     
@@ -228,11 +238,13 @@
                 }
                 failure:^(NSURLSessionDataTask * operation, NSError * error) {
                     NSLog(@"Unable to verify access token, %@", error.localizedDescription);
+                    self.spashImage.hidden = YES;
                     [self processContacts:contactObjects];
                 }];
             
         }
         else {
+            self.spashImage.hidden = YES;
             [self processContacts:contactObjects];
         }
 
@@ -285,13 +297,14 @@
             }
             else {
                 global.thisUser.contact_objects = matchesAndPairs.contact_objects;
-                global.thisUser.contact_id = [NSNumber numberWithInt: 262]; //TO BE REMOVED CHANGE ADDED NEEDS TO BE IMPLEMENTED
                 self.matches = matchesAndPairs.matches;
                 self.finishedProcessingContacts = true;
                 if (self.toPresentMatches) {
+                    [Global endProgress];
                     [self performSegueWithIdentifier:@"SplashToNavigation" sender:self];
                 }
                 else if (self.toRegister) {
+                    [Global endProgress];
                     [self performSegueWithIdentifier:@"SplashToRegister" sender:self];
 
                 }
@@ -315,6 +328,8 @@
 
 
 - (void) viewWillAppear:(BOOL)animated {
+    
+    self.spashImage.hidden = NO;
     
     //Retrieve the contacts for processing
     
@@ -414,7 +429,8 @@
                 [navigationController.navigationBar setTintColor:[UIColor blackColor]];
             }
             
-            navigationController.navigationBar.tintColor = [UIColor whiteColor];
+            navigationController.navigationBar.tintColor = [UIColor grayColor];
+            ((MatchflareAppDelegate *)[UIApplication sharedApplication].delegate).navigationController = navigationController;
             [navigationController.navigationBar
              setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName: [UIFont fontWithName:@"OpenSans" size:17.0]}];
             
@@ -423,7 +439,18 @@
 
             
             PresentMatchesViewController *controller = (PresentMatchesViewController * )navigationController.topViewController;
-            controller.matches = self.matches;
+            if (!controller.matches) {
+                controller.matches = (NSMutableArray<Match>*)[[NSMutableArray alloc] init];
+            }
+            [controller.matches addObjectsFromArray:self.matches];
+            
+            if (self.initialNotification) {
+                UIViewController *nextController = [[Global getInstance] controllerFromNotification:self.initialNotification];
+                if (nextController) {
+                    [navigationController pushViewController:nextController animated:YES];
+                }
+            }
+            
         }
     }
     

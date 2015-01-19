@@ -11,5 +11,8 @@
 @interface MatchflareAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) UINavigationController* navigationController;
+
+- (void) registerForRemoteNotifications;
 
 @end

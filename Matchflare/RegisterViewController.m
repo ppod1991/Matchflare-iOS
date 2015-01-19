@@ -10,6 +10,9 @@
 #import "ProfilePictureViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "Global.h"
+#import "StringResponse.h"
+#import "MatchflareAppDelegate.h"
 
 @interface RegisterViewController()
 @property (strong, nonatomic) IBOutlet UIView *phoneNumberView;
@@ -49,6 +52,8 @@
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *pictureConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *verificationConstraint;
 
+@property (strong, nonatomic) NSString *rawPhoneNumber;
+
 @end
 @implementation RegisterViewController
 
@@ -83,8 +88,8 @@
     [self.nextCodeButton sizeToFit];
     
     [self.phoneNumberField becomeFirstResponder];
+    self.toVerifyPerson = [[Person alloc] init];
 
-    
 }
 
 - (void) animateIn:(UIView *) incomingView withConstraint: (NSLayoutConstraint *) inConstraint withOutgoingView: (UIView *) outgoingView withConstraint: (NSLayoutConstraint *) outConstraint {
@@ -129,31 +134,143 @@
 }
 
 - (IBAction)sendSMSPressed:(id)sender {
-    [self animateIn:self.nameView withConstraint:self.nameConstraint withOutgoingView:self.phoneNumberView withConstraint:self.phoneConstraint];
-    [self.nameField becomeFirstResponder];
+
+    NSString *potentialPhoneNumber = self.phoneNumberField.text;
+    if (potentialPhoneNumber.length < 10) {
+        [Global showToastWithText:@"Must enter valid phone number with area code!"];
+    }
+    else {
+        self.rawPhoneNumber = potentialPhoneNumber;
+        NSString *deviceID = [Global getDeviceId];
+        
+        //Send verification SMS
+        [Global postTo:@"sendSMSVerification" withParams:@{@"device_id":deviceID,@"phone_number":self.rawPhoneNumber} withBody:nil
+               success:^(NSURLSessionDataTask* operation, id responseObject) {
+                   NSLog(@"Sent Verification sms");
+                   [Global showToastWithText:@"Sending verification SMS!"];
+               }
+               failure:^(NSURLSessionDataTask * operation, NSError * error) {
+                   NSLog(@"Error sending verification SMS: %@", error.localizedDescription);
+               }];
+        
+        //Check if there is a picture associated with this phone number already
+        [Global get:@"pictureURL" withParams:@{@"device_id":deviceID,@"phone_number":self.rawPhoneNumber}
+            success:^(NSURLSessionDataTask* operation, id responseObject) {
+                NSError *err;
+                StringResponse *response = [[StringResponse alloc] initWithDictionary:responseObject error:&err];
+                
+                if (err) {
+                    NSLog(@"Unable to convert image string response, %@", err.localizedDescription);
+                }
+                else {
+                    self.toVerifyPerson.image_url = response.response;
+                    self.nextImageButton.titleLabel.text = @"next";
+                    [self.nextImageButton sizeToFit];
+                    [self.profileThumbnail sd_cancelCurrentImageLoad];
+                    [self.profileThumbnail sd_setImageWithURL:[NSURL URLWithString:self.toVerifyPerson.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
+                }
+            }
+            failure:^(NSURLSessionDataTask * operation, NSError * error) {
+                NSLog(@"No verified image found, %@", error.localizedDescription);
+            }];
+        
+        [self animateIn:self.nameView withConstraint:self.nameConstraint withOutgoingView:self.phoneNumberView withConstraint:self.phoneConstraint];
+        [self.nameField becomeFirstResponder];
+
+    }
 }
 
 - (IBAction)nextNamePressed:(id)sender {
-    [self animateIn:self.genderView withConstraint:self.genderConstraint withOutgoingView:self.nameView withConstraint:self.nameConstraint];
-    [self.nameField resignFirstResponder];
+    
+    NSString *trimmedString = [self.nameField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSRange whiteSpaceRange = [trimmedString rangeOfCharacterFromSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if (whiteSpaceRange.location == NSNotFound) {
+        [Global showToastWithText:@"Must enter your real first and last name!"];
+    }
+    else {
+        self.toVerifyPerson.guessed_full_name = trimmedString;
+        [self animateIn:self.genderView withConstraint:self.genderConstraint withOutgoingView:self.nameView withConstraint:self.nameConstraint];
+        [self.nameField resignFirstResponder];
+    }
+    
+
 }
 - (IBAction)genderChosen:(id)sender {
+    
+    if (self.genderControl.selectedSegmentIndex == 0) {
+        self.toVerifyPerson.guessed_gender = @"FEMALE";
+    }
+    else if (self.genderControl.selectedSegmentIndex == 1){
+        self.toVerifyPerson.guessed_gender = @"MALE";
+    }
+    
     [self animateIn:self.preferencesView withConstraint:self.preferencesConstraint withOutgoingView:self.genderView withConstraint:self.genderConstraint];
 }
 
 - (IBAction)nextPreferencesPressed:(id)sender {
-    [self animateIn:self.profileView withConstraint:self.pictureConstraint withOutgoingView:self.preferencesView withConstraint:self.preferencesConstraint];
+    
+    NSMutableArray *genderPreferences = [[NSMutableArray alloc] init];
+    if (self.guysSwitch.isOn) {
+        [genderPreferences addObject:@"MALE"];
+    }
+    if (self.girlsSwitch.isOn) {
+        [genderPreferences addObject:@"FEMALE"];
+    }
+    if (genderPreferences.count < 1) {
+        [Global showToastWithText:@"Must choose one preference!"];
+    }
+    else {
+        self.toVerifyPerson.gender_preferences = genderPreferences;
+        [self animateIn:self.profileView withConstraint:self.pictureConstraint withOutgoingView:self.preferencesView withConstraint:self.preferencesConstraint];
+    }
+
 }
+
 - (IBAction)chooseImagePressed:(id)sender {
+    [self performSegueWithIdentifier:@"RegisterToPicture" sender:self];
 }
+
 - (IBAction)nextImagePressed:(id)sender {
     [self animateIn:self.verificationView withConstraint:self.verificationConstraint withOutgoingView:self.profileView withConstraint:self.pictureConstraint];
     [self.codeField becomeFirstResponder];
 }
 
 - (IBAction)nextCodePressed:(id)sender {
-    [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
-    [self.phoneNumberField becomeFirstResponder];
+    
+    Global *global = [Global getInstance];
+    [Global startProgress];
+    self.toVerifyPerson.contact_objects = global.thisUser.contact_objects;
+    
+    [Global postTo:@"verifyVerificationSMS" withParams:@{@"device_id":[Global getDeviceId],@"phone_number":self.rawPhoneNumber,@"input_verification_code":self.codeField.text} withBody:self.toVerifyPerson
+           success:^(NSURLSessionDataTask* operation, id responseObject) {
+               [Global endProgress];
+               NSError *err;
+               Person *receivedPerson = [[Person alloc] initWithDictionary:responseObject error:&err];
+               
+               if (err) {
+                   NSLog(@"Unable to convert response to person, %@", err.localizedDescription);
+                   [Global showToastWithText:@"Invalid or expired code. Argh--try again!"];
+                   [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
+                   [self.phoneNumberField becomeFirstResponder];
+               }
+               else {
+                   
+                   global.thisUser = receivedPerson;
+                   [global setAccessToken:global.thisUser.access_token];
+                   [self performSegueWithIdentifier:@"RegisterToNavigation" sender:self];
+                   [global registerForPushNotifications];
+               }
+           }
+           failure:^(NSURLSessionDataTask * operation, NSError * error) {
+               [Global endProgress];
+               NSLog(@"Failed to verify user, %@", error.localizedDescription);
+               [Global showToastWithText:@"Invalid or expired code. Argh--try again!"];
+               [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
+               [self.phoneNumberField becomeFirstResponder];
+    }];
+    
+
 }
 
 - (IBAction) chosePicture:(UIStoryboardSegue *) segue {
@@ -161,9 +278,47 @@
         if ([segue.sourceViewController isKindOfClass:[ProfilePictureViewController class]]) {
             
             [self.profileThumbnail sd_cancelCurrentImageLoad];
-            [self.profileThumbnail sd_setImageWithURL:[NSURL URLWithString:self.imageURL] placeholderImage:nil];
+            [self.profileThumbnail sd_setImageWithURL:[NSURL URLWithString:self.toVerifyPerson.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
         }
     }
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"RegisterToNavigation"]) {
+        
+        if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *navigationController = segue.destinationViewController;
+            
+            
+            //Change color of navigation bar
+            if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+                
+                // do stuff for iOS 7 and newer
+                [navigationController.navigationBar setBarTintColor:[UIColor blackColor]];
+            }
+            else {
+                
+                // do stuff for older versions than iOS 7
+                [navigationController.navigationBar setTintColor:[UIColor blackColor]];
+            }
+            
+            navigationController.navigationBar.tintColor = [UIColor grayColor];
+            ((MatchflareAppDelegate *)[UIApplication sharedApplication].delegate).navigationController = navigationController;
+            
+            [navigationController.navigationBar
+             setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor], NSFontAttributeName: [UIFont fontWithName:@"OpenSans" size:17.0]}];
+            
+            [[UIBarButtonItem appearanceWhenContainedIn:[UINavigationBar class], nil] setTitleTextAttributes:
+             @{NSFontAttributeName:[UIFont fontWithName:@"OpenSans-Light" size:16.0]} forState:UIControlStateNormal];
+        }
+    }
+    else if ([segue.identifier isEqualToString:@"RegisterToPicture"]) {
+        if ([segue.destinationViewController isKindOfClass:[ProfilePictureViewController class]]) {
+            ProfilePictureViewController *ppvc = segue.destinationViewController;
+            ppvc.isFromRegister = YES;
+        }
+    }
+    
+
+}
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Match.h"
 #import <AddressBookUI/AddressBookUI.h>
+#import "Notification.h"
 
 @interface SplashViewController : UIViewController <UIPageViewControllerDataSource, UIPageViewControllerDelegate>
 
@@ -20,6 +21,6 @@
 @property BOOL toPresentMatches;
 @property BOOL finishedProcessingContacts;
 @property BOOL toRegister;
-
+@property Notification *initialNotification;
 
 @end

@@ -10,8 +10,15 @@
 #import <QuartzCore/QuartzCore.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "MatcheeOptionsViewController.h"
+#import "Global.h"
+#import <M13Checkbox.h>
+#import "UpdateProfileViewController.h"
+#import <BBBadgeBarButtonItem.h>
+#import "NotificationLists.h"
+#import "NotificationTableViewController.h"
 
-@interface PresentMatchesViewController()
+@interface PresentMatchesViewController() <UIActionSheetDelegate>
+@property (strong, nonatomic) IBOutlet UILabel *scoreLabel;
 
 @property (weak, nonatomic) UIView *currentView;
 @property (strong, nonatomic) CATransition *returnAnimation;
@@ -19,9 +26,32 @@
 @property (strong, nonatomic) NSString *currentDescription;
 @property BOOL isFirst; //For long press--determines whether first or second matchee was long pressed
 @property int initialX;
+@property (strong, nonatomic) M13Checkbox *anonymous_checkbox;
+@property (strong, nonatomic) BBBadgeBarButtonItem *barButton;
+@property (strong, nonatomic) NotificationLists *notifications;
+
 @end
 
 @implementation PresentMatchesViewController
+
+- (IBAction)moreOptionsPressed:(id)sender {
+    
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil
+                                                             delegate:self
+                                                    cancelButtonTitle:@"Cancel"
+                                               destructiveButtonTitle:nil
+                                                    otherButtonTitles:[NSString stringWithFormat:@"Update Profile"], nil];
+    [actionSheet showInView:self.view];
+    
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self performSegueWithIdentifier:@"PresentToUpdate" sender:self];
+    }
+}
+
 
 - (IBAction) choseNewMatchee:(UIStoryboardSegue *) segue {
     if ([segue.identifier isEqualToString:@"ChoseToPresent"]) {
@@ -51,8 +81,14 @@
         if ([segue.sourceViewController isKindOfClass:[MatcheeOptionsViewController class]]) {
             MatcheeOptionsViewController *mvc = segue.sourceViewController;
             NSLog([NSString stringWithFormat:@"Simulated--NOT showing %@ anymore",mvc.existingMatchee.guessed_full_name]);
+            [Global postTo:@"removeContact" withParams:@{@"contact_id":[Global getInstance].thisUser.contact_id,@"to_remove_contact_id":mvc.existingMatchee.contact_id} withBody:nil success:^(NSURLSessionDataTask *task , id responseObject) {
+                NSLog(@"Successfully blocked this user");
+                [Global showToastWithText:@"You won't see this person anymore!"];
+            } failure:^(NSURLSessionDataTask *task, NSError *err) {
+                NSLog(@"Failed to block this user: %@",err.localizedDescription);
+    
+            }];
             [self presentNextMatch:true];
-            //NEED TO IMPLEMENT -- Post request to stop showing this matchee
         }
     }
 }
@@ -74,16 +110,22 @@
     else if(sender.state==UIGestureRecognizerStateEnded || sender.state==UIGestureRecognizerStateCancelled || sender.state==UIGestureRecognizerStateFailed)
     {
 
-        
+        BOOL completed = NO;
         if (deltaX < -50 || xVelocity < -400) {
             NSLog(@"Left swipe");
-            [self passTriggered];
+            if([self passTriggered]) {
+                completed = YES;
+            }
         }
         else if (deltaX > 50 || xVelocity > 400) {
             NSLog(@"Right swipe");
-            [self matchTriggered];
+            if ([self matchTriggered]) {
+                completed = YES;
+            }
         }
-        else {
+        
+        if (!completed)
+        {
             NSLog(@"Reset");
             
             self.descriptionLabel.text = self.currentDescription;
@@ -235,63 +277,75 @@
 
 - (void) showMatcheeOptions {
     [self performSegueWithIdentifier:@"PresentToOptions" sender:self];
-//    UIAlertController *alertController = [UIAlertController
-//                                          alertControllerWithTitle:@"Ayo"
-//                                          message:@"woo"
-//                                          preferredStyle:UIAlertControllerStyleAlert];
-//    
-//    UIAlertAction *cancelAction = [UIAlertAction
-//                                   actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel action")
-//                                   style:UIAlertActionStyleCancel
-//                                   handler:^(UIAlertAction *action)
-//                                   {
-//                                       NSLog(@"Cancel action");
-//                                   }];
-//    
-//    UIAlertAction *okAction = [UIAlertAction
-//                               actionWithTitle:NSLocalizedString(@"OK", @"OK action")
-//                               style:UIAlertActionStyleDefault
-//                               handler:^(UIAlertAction *action)
-//                               {
-//                                   NSLog(@"OK action");
-//                               }];
-//    
-//    [alertController addAction:cancelAction];
-//    [alertController addAction:okAction];
-//    
-//    [self presentViewController:alertController animated:YES completion:nil];
 }
 
-- (void) passTriggered {
+- (BOOL) passTriggered {
     NSLog(@"Pass button pressed!");
     [self presentNextMatch: true];
     [self.descriptionLabel.layer addAnimation:self.quickAnimation forKey:@"changeTextTransition"];
     self.descriptionLabel.text = @"match passed";
     self.descriptionLabel.textColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:0.8]; //Matchflare pink
+    return YES;
     
 }
 - (IBAction)passButtonPressed:(id)sender {
     [self passTriggered];
-
-//    [self.descriptionLabel.layer addAnimation:self.animation forKey:@"changeTextTransition"];
-//
-//    self.descriptionLabel.text = @"Should they meet?!";
 }
 
-- (void) matchTriggered {
-    [self presentNextMatch: false];
-    [self.descriptionLabel.layer addAnimation:self.quickAnimation forKey:@"changeTextTransition"];
-    self.descriptionLabel.text = @"match made";
-    self.descriptionLabel.textColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:0.8]; //Matchflare pink
+- (BOOL) matchTriggered {
+    Global *global = [Global getInstance];
+    if (!(global.thisUser.contact_id > 0)) {
+        [Global showToastWithText:@"Need to Register First!"];
+        //NEED TO SEGUE TO REGISTRATION VIEW CONTROLLER -- NEED TO IMPLEMENT
+        return NO;
+    }
+    else if (self.currentMatch.first_matchee.contact_id == global.thisUser.contact_id || self.currentMatch.second_matchee.contact_id == global.thisUser.contact_id){
+        [Global showToastWithText:@"Tricky--sorry, you can't match yourself"];
+        return NO;
+    }
+    else if (self.currentMatch.first_matchee.contact_id == self.currentMatch.second_matchee.contact_id) {
+        [Global showToastWithText:@"You can't match the same person, silly!"];
+        return NO;
+    }
+    else {
+        self.currentMatch.match_status = @"MATCHED";
+        if (self.anonymous_checkbox.checkState == M13CheckboxStateChecked) {
+            self.currentMatch.is_anonymous = YES;
+        }
+        else if (self.anonymous_checkbox.checkState == M13CheckboxStateUnchecked) {
+            self.currentMatch.is_anonymous = NO;
+        }
+        
+        [self addMatchResult];
+        [self presentNextMatch: false];
+        [self.descriptionLabel.layer addAnimation:self.quickAnimation forKey:@"changeTextTransition"];
+        self.descriptionLabel.text = @"match made";
+        self.descriptionLabel.textColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:0.8]; //Matchflare pink
+        return YES;
+    }
 
+
+}
+
+- (void) addMatchResult {
+    Global *global = [Global getInstance];
+    self.currentMatch.matcher.contact_id  = global.thisUser.contact_id;
+    
+    [Global postTo:@"postMatch" withParams:nil withBody:self.currentMatch
+           success:^(NSURLSessionDataTask* operation, id responseObject) {
+               NSDictionary *response = responseObject;
+               NSNumber *score = [response objectForKey:@"matchflare_score"];
+               self.scoreLabel.text = [NSString stringWithFormat:@"%@",score];
+           }
+           failure:^(NSURLSessionDataTask * operation, NSError * error) {
+               NSLog(@"Error while retrieving score, %@", error.localizedDescription);
+           }];
+    
 }
 
 - (IBAction)matchButtonPressed:(id)sender {
     [self matchTriggered];
-    
     NSLog(@"Match button pressed!");
-    //    [self.descriptionLabel.layer addAnimation:self.animation forKey:@"changeTextTransition"];
-//    self.descriptionLabel.text = @"Should they meet?!";
 }
 
 - (void)animationDidStop:(CAAnimation *)theAnimation finished:(BOOL)flag
@@ -310,8 +364,34 @@
     self.descriptionLabel.textColor = [UIColor colorWithRed:149/255.0 green:149/255.0 blue:149/255.0 alpha:0.8]; //Light gray
 };
 
+- (void) notificationButtonPressed {
+    [self performSegueWithIdentifier:@"PresentToNotification" sender:self];
+}
+
 - (void) viewDidLoad {
     [super viewDidLoad];
+    
+    //Set-Up notification bar button
+    UIButton *notificationButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
+    UIImage *notificationIcon = [UIImage imageNamed:@"notification_icon"];
+    [notificationButton setContentMode:UIViewContentModeScaleAspectFill];
+    notificationIcon = [notificationIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [notificationButton addTarget:self action:@selector(notificationButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    [notificationButton setImage:notificationIcon forState:UIControlStateNormal];
+    
+    self.barButton = [[BBBadgeBarButtonItem alloc] initWithCustomUIButton:notificationButton];
+    self.barButton.badgeValue = @"1";
+    self.barButton.shouldHideBadgeAtZero = YES;
+    self.barButton.shouldAnimateBadge = YES;
+    self.barButton.badgeOriginX = 17.0f;
+    self.barButton.badgeOriginY = 2.0f;
+    self.barButton.badgeMinSize = 0.0f;
+    //self.barButton.ba
+    self.barButton.badgeBGColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:1.0]; //Matchflare pink
+    self.barButton.badgeFont = [UIFont fontWithName:@"OpenSans-Light" size:8.0f];
+    self.navigationItem.rightBarButtonItem = self.barButton;
+    self.barButton.badgePadding = 2.0f;
+    
     //Change fonts + other styling
     self.firstMatcheeName.font = [UIFont fontWithName:@"OpenSans-Light" size:26.0];
     self.secondMatcheeName.font = [UIFont fontWithName:@"OpenSans-Light" size:26.0];
@@ -337,7 +417,7 @@
     self.descriptionLabel.text = self.currentDescription;
 
     
-    self.currentView = self.matchOne;
+    
     
     //Make images circular
     self.firstMatcheeImage.layer.cornerRadius = self.firstMatcheeImage.frame.size.width / 2;
@@ -404,9 +484,24 @@
     
     [self.nextSecondMatcheeImage.layer insertSublayer:nextSecondGradient atIndex:0];
     
+    self.currentView = self.matchOne;
     
-    
-    
+    //Initialize anonymous checkbox
+    self.anonymous_checkbox = [[M13Checkbox alloc] initWithTitle:@"anonymous?"];
+    self.anonymous_checkbox.titleLabel.font = [UIFont fontWithName:@"OpenSans-Light" size:13.0];
+    self.anonymous_checkbox.titleLabel.textColor = [UIColor colorWithRed:149/255.0 green:149/255.0 blue:149/255.0 alpha:0.7];
+    self.anonymous_checkbox.strokeColor = [UIColor colorWithRed:149/255.0 green:149/255.0 blue:149/255.0 alpha:0.7];
+    self.anonymous_checkbox.strokeWidth = 0.6;
+
+        self.anonymous_checkbox.checkColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:1.0]; //Matchflare pink
+    self.anonymous_checkbox.frame = CGRectMake(self.anonymous_checkbox.frame.origin.x,self.anonymous_checkbox.frame.origin.y,self.anonymous_checkbox.frame.size.width,self.anonymous_checkbox.frame.size.height);
+    self.anonymous_checkbox.checkHeight = 13;
+        //[self.anonymous_checkbox autoFitWidthToText];
+    self.anonymous_checkbox.tintColor = [UIColor clearColor];
+    self.anonymous_checkbox.radius = 0.7;
+    [self.anonymous_checkbox setCheckAlignment:M13CheckboxAlignmentLeft];
+    [self.checkboxView addSubview:self.anonymous_checkbox];
+    [self.view bringSubviewToFront:self.checkboxView];
 }
 
 - (void) slideOutView:(UIView *) mView toLeft: (BOOL) toLeft{
@@ -488,24 +583,93 @@
                      }];
 }
 
+- (void) getMoreMatches {
+    Global *global = [Global getInstance];
+    if (global.thisUser.contact_id > 0) {
+        [Global postTo:@"getMatches" withParams:@{@"contact_id":global.thisUser.contact_id} withBody:global.thisUser
+               success:^(NSURLSessionDataTask* operation, id responseObject) {
+                   NSMutableArray *matches = [Match arrayOfModelsFromDictionaries:responseObject];
+                   if (!matches) {
+                       NSLog(@"Unable to convert array of matches");
+                   }
+                   else {
+                       if (!self.matches) {
+                           self.matches = (NSMutableArray <Match>*)[[NSMutableArray alloc] init];
+                       }
+                       
+                       [self.matches addObjectsFromArray:matches];
+                       
+                       if (!self.currentMatch) {
+                           [Global endProgress];
+                           [self presentNextMatch:YES];
+                       }
+                   }
+               }
+               failure:^(NSURLSessionDataTask * operation, NSError * error) {
+                   NSLog(@"Error while retrieving matches to present, %@", error.localizedDescription);
+               }];
+    }
+}
+
+- (void) pushNotificationReceived: (NSNotification *) notification {
+    [self updateNotifications];
+}
+
+- (void) updateNotifications {
+    Global *global = [Global getInstance];
+    if (global.thisUser.contact_id > 0) {
+        [Global get:@"notificationLists" withParams:@{@"contact_id":global.thisUser.contact_id}
+            success:^(NSURLSessionDataTask* operation, id responseObject) {
+                NSError *err;
+                if ((BOOL) responseObject) {
+                    NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
+                    self.notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
+                    if (self.notifications.notifications) {
+                        self.barButton.badgeValue = [NSString stringWithFormat:@"%lu",(unsigned long)self.notifications.notifications.count];
+                        [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count];
+                    }
+                }
+                else {
+                    NSLog(@"Failed to retrieve notifications: %@", [responseObject description]);
+                }
+                
+                if (err) {
+                    NSLog(@"Unable to convert notifications, %@", err.localizedDescription);
+                }
+            }
+            failure:^(NSURLSessionDataTask * operation, NSError * error) {
+                [Global endProgress];
+                NSLog(@"Unable to retrieve notifications, %@", error.localizedDescription);
+            }];
+    }
+}
+
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (self.matches) {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotificationReceived:) name:@"pushNotification" object:nil];
+
+    
+    if (self.matches && self.matches.count > 0) {
         //Has matches ready to show
         if (!self.currentMatch) {
             [self presentNextMatch: true];
         }
     }
     else {
-        //Load matches -- NEED TO IMPLEMENT
+        [self getMoreMatches];
+        [Global startProgress];
     }
+    [self getAndSetScore];
+    [self updateNotifications];
+}
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) presentNextMatch:(BOOL)toLeft {
-    
-
-
 
     if (self.currentMatch == nil) {
         if (self.matches.count > 1) {
@@ -541,8 +705,25 @@
     }
     
     
-    
-    //NEED TO IMPLMENT -- IF MATCHES IS < 10, then load more matches
+    if (self.matches.count < 10) {
+        [self getMoreMatches];
+    }
+}
+
+- (void) getAndSetScore {
+    Global *global = [Global getInstance];
+    if (global.thisUser.contact_id > 0) {
+        [Global get:@"getScore" withParams:@{@"contact_id":global.thisUser.contact_id}
+               success:^(NSURLSessionDataTask* operation, id responseObject) {
+                   NSDictionary *response = responseObject;
+                   NSNumber *score = [response objectForKey:@"matchflare_score"];
+                   self.scoreLabel.text = [NSString stringWithFormat:@"%@",score];
+               }
+               failure:^(NSURLSessionDataTask * operation, NSError * error) {
+                   NSLog(@"Error while retrieving score, %@", error.localizedDescription);
+               }];
+    }
+
 }
 
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -558,6 +739,12 @@
             }
         }
     }
+    else if ([segue.identifier isEqualToString:@"PresentToNotification"]) {
+        if ([segue.destinationViewController isKindOfClass:[NotificationTableViewController class]]) {
+            NotificationTableViewController *ntvc = [segue destinationViewController];
+            ntvc.notifications = self.notifications;
+        }
+    }
 }
 
 
@@ -569,10 +756,10 @@
         
         
         [self.firstMatcheeImage sd_cancelCurrentImageLoad];
-        [self.firstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:nil];
+        [self.firstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
 
         [self.secondMatcheeImage sd_cancelCurrentImageLoad];
-        [self.secondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:nil];
+        [self.secondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
         
         [self.view bringSubviewToFront:self.firstMatcheeName];
         [self.view bringSubviewToFront:self.secondMatcheeName];
@@ -582,17 +769,27 @@
         self.nextSecondMatcheeName.text = theMatch.second_matchee.guessed_full_name;
         
         [self.nextFirstMatcheeImage sd_cancelCurrentImageLoad];
-        [self.nextFirstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:nil];
+        [self.nextFirstMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.first_matchee.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
         
         
         [self.nextSecondMatcheeImage sd_cancelCurrentImageLoad];
-        [self.nextSecondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:nil];
+        [self.nextSecondMatcheeImage sd_setImageWithURL:[NSURL URLWithString:theMatch.second_matchee.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
         
         [self.view bringSubviewToFront:self.nextFirstMatcheeName];
         [self.view bringSubviewToFront:self.nextSecondMatcheeName];
     }
 
-
+    if (self.currentMatch.first_matchee.verified && self.currentMatch.second_matchee.verified) {
+        [self.anonymous_checkbox setEnabled:YES];
+    }
+    else {
+        [self.anonymous_checkbox setEnabled:NO];
+    }
     
 }
+
+- (IBAction)homeButtonPressed:(UIStoryboardSegue*)sender
+{
+}
+
 @end

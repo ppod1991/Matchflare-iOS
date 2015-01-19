@@ -23,14 +23,32 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+
+    
+    [self willEnter];
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserver:self
+     selector:@selector(willLeave)
+     name:UIApplicationWillResignActiveNotification
+     object:nil];
+    
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnter) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+}
+
+- (void) willEnter {
     NSString *urlString = @"ws://matchflare.herokuapp.com/liveChat";
     self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urlString]];
     self.webSocket.delegate = self;
-    
     [self.webSocket open];
-    
-    
-    
+    NSLog(@"Opening websocket");
+}
+
+- (void) willLeave {
+    [_webSocket closeWithCode:1000 reason:nil];
+    NSLog(@"Closing web socket!");
 }
 
 - (void) sendPing {
@@ -49,7 +67,7 @@
     initialMessage.chat_id = self.chat_id;
     initialMessage.pair_id = self.pair_id;
     initialMessage.sender_contact_id = self.contact_id;
-    
+    [Global startProgress];
     [self.webSocket send:[initialMessage toJSONString]];
     
     //Timer for pings
@@ -82,11 +100,12 @@
     
     if (!err) {
         if ([receivedMessage.type isEqualToString:@"history"]) {
-            //NEED TO IMPLEMENT
+            
             NSLog(@"Received history!");
             
             self.thisMatch = receivedMessage.pair;
             self.senderDisplayName = receivedMessage.guessed_full_name;
+            [self.data.messages removeAllObjects];
             for (ChatMessage *currentMessage in receivedMessage.history) {
                 NSString *name = currentMessage.guessed_full_name;
                 if (self.thisMatch.is_anonymous && currentMessage.sender_contact_id == self.thisMatch.matcher.contact_id.intValue) {
@@ -105,6 +124,7 @@
             [self.collectionView reloadData];
             [self scrollToBottomAnimated:true];
             [self setTitle];
+            [Global endProgress];
             
         }
         else if ([receivedMessage.type isEqualToString:@"message"]) {
@@ -172,7 +192,7 @@
         }
         else if ([m.matcher.contact_id isEqualToNumber:  thisUserContactId]) { //If this user is the matcher
             if (m.first_matchee.matcher_chat_id == self.chat_id) { //Determine which matchee the other chatter is
-                description = [NSString stringWithFormat:@"Answer %@'s ?s of %@!",[self getFirstName:m.first_matchee.guessed_full_name],[self getFirstName:m.second_matchee.guessed_full_name]];
+                description = [NSString stringWithFormat:@"Answer %@'s questions!",[self getFirstName:m.first_matchee.guessed_full_name]];
             }
             else if (m.second_matchee.matcher_chat_id == self.chat_id) {
                 description = [NSString stringWithFormat:@"Answer %@'s ?s of %@!",[self getFirstName:m.second_matchee.guessed_full_name],[self getFirstName:m.first_matchee.guessed_full_name]];
@@ -185,8 +205,12 @@
 
 - (void) viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [_webSocket closeWithCode:1000 reason:nil];
-    NSLog(@"Closing web socket!");
+    [self willLeave];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+
 }
 
 
@@ -194,17 +218,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    //TO CHANGE 
     Global *global = [Global getInstance];
-    self.contact_id = global.thisUser.contact_id.intValue; //238;
-    
-    
-    if (!self.pair_id || !self.chat_id) {
-        self.pair_id = 613;
-        self.chat_id = 917;
-    }
-
-    
+    self.contact_id = global.thisUser.contact_id.intValue;
     
     //self.senderId = [NSString stringWithFormat:@"%d", global.thisUser.contact_id.intValue];
     self.senderId = [NSString stringWithFormat:@"%d", self.contact_id];

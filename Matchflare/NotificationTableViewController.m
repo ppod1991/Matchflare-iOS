@@ -37,17 +37,29 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void) viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void) pushNotificationReceived: (NSNotification *) notification {
+    [self updateNotifications];
     
+}
+
+- (void) updateNotifications {
+    
+    if (!self.notifications) {
+        [Global startProgress];
+    }
     Global *global = [Global getInstance];
     
     [Global get:@"notificationLists" withParams:@{@"contact_id":global.thisUser.contact_id}
         success:^(NSURLSessionDataTask* operation, id responseObject) {
+            if (!self.notifications) {
+                [Global endProgress];
+            }
+            
             NSError *err;
             if ((BOOL) responseObject) {
                 NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
                 self.notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count];
                 [self.tableView reloadData];
             }
             else {
@@ -59,9 +71,26 @@
             }
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
+            [Global endProgress];
             NSLog(@"Unable to retrieve notifications, %@", error.localizedDescription);
         }];
+
 }
+
+- (void) viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotificationReceived:) name:@"pushNotification" object:nil];
+    
+    [self updateNotifications];
+}
+
+
 
 - (NSArray *) listAtIndex: (NSNumber *) index {
     if ([index isEqualToNumber:[NSNumber numberWithInt:0]]) {
@@ -101,88 +130,63 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
-//    if (indexPath.row == 0) {
-//        CellIdentifier = @"HeaderCell";
-//    }
-//    else {
-//        CellIdentifier = @"NotificationCell";
-//    }
     
     UITableViewCell *cell = (UITableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     // Configure the cell...
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        
-//        UIImageView *tempImageView = (UIImageView *) [cell viewWithTag:0];
-//        
-//        tempImageView.frame = CGRectMake(0, 0, tempImageView.frame.size.width-20, tempImageView.frame.size.height-20);
+
         cell.backgroundColor = [UIColor colorWithRed:44/255.0 green:44/255.0 blue:44/255.0 alpha:1.0];
-        
+        UILabel *initLabel = cell.textLabel;
+        initLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        initLabel.numberOfLines = 0;
     }
     
-//    UILabel *label = (UILabel *)[cell viewWithTag:1];
-//    UIImageView *imageView = (UIImageView *) [cell viewWithTag:0];
 
     UILabel *label = cell.textLabel;
     
-    //UIImageView *imageView = (UIImageView *) [cell viewWithTag:0];
     
     if (indexPath.row == 0) {
         cell.accessoryView = nil;
-        //imageView = nil;
-        //UILabel *label = (UILabel *)[cell viewWithTag:1];
         NSString *arrow;
         
         label.text = [self.sectionHeaders objectAtIndex:indexPath.section];
         label.font = [UIFont fontWithName:@"OpenSans" size:17.0];
         label.textColor = [UIColor whiteColor];
-//        label.textAlignment = NSTextAlignmentLeft;
-//        int section = indexPath.section;
-//        int row = indexPath.row;
         if ([[self.isExpanded objectAtIndex:indexPath.section] boolValue]) {
             arrow = @"▿";
         }
         else {
             arrow = @"▹";
         }
-        label.text = [NSString stringWithFormat:@"%@      %@",arrow,[self.sectionHeaders objectAtIndex:indexPath.section]];
+        NSArray *listAtIndex = (NSArray*) [self listAtIndex:[NSNumber numberWithInteger:indexPath.section] ];
+        label.text = [NSString stringWithFormat:@"%@      %@ (%lu)",arrow,[self.sectionHeaders objectAtIndex:indexPath.section],(unsigned long)listAtIndex.count];
     }
     else {
-//        UILabel *label = (UILabel *)[cell viewWithTag:1];
-//        UIImageView *imageView = (UIImageView *) [cell viewWithTag:0];
-    
-        
         id currentObject = [[self listAtIndex:[NSNumber numberWithInteger:indexPath.section]] objectAtIndex:indexPath.row-1];
         label.text = [currentObject description];
-        
-        
-
+    
         if (indexPath.section > 0) {
             Match *thisMatch = (Match *) currentObject;
             if (thisMatch.has_unseen) {
                 label.textColor = [UIColor colorWithRed:250/255.0 green:69/255.0 blue:118/255.0 alpha:0.8]; //Matchflare pink
-                //imageView.image = [UIImage imageNamed:@"new_message.png"];
                 UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"new_message.png"]];
                 imageView.contentMode = UIViewContentModeScaleAspectFit;
                 imageView.frame = CGRectMake(0, 0, 30, 30);
                 imageView.center = imageView.superview.center;
-//                CGSize itemSize = CGSizeMake(30, 30);
-//                UIGraphicsBeginImageContextWithOptions(itemSize, NO, UIScreen.mainScreen.scale);
-//                CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-//                [imageView.image drawInRect:imageRect];
-//                imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-//                //imageView.frame = imageRect;
-//                UIGraphicsEndImageContext();
                 
                 cell.accessoryView = imageView;
             }
             else {
                 label.textColor = [UIColor whiteColor];
-//                imageView.image = nil;
                 cell.accessoryView = nil;
             }
             
+        }
+        else {
+            label.textColor = [UIColor whiteColor];
+            cell.accessoryView = nil;
         }
         label.font = [UIFont fontWithName:@"OpenSans-Light" size:13.0];
     }
@@ -222,6 +226,15 @@
                 [self performSegueWithIdentifier:@"NotificationToView" sender:self];
                 
             }
+            
+            //Mark notification as seen
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count-1];
+            [Global postTo:@"seeNotification" withParams:@{@"notification_id":[NSNumber numberWithInt:chosenNotification.notification_id]} withBody:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSLog(@"Notification successfully marked as seen");
+            } failure:^(NSURLSessionDataTask *task, NSError *err) {
+                NSLog(@"Failed to mark notification as seen: %@",err.localizedDescription);
+            }];
+                                                           
         }
         //Pending matches
         else if (indexPath.section == 1) {

@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		13057EC01A64A4A7000747B2 /* StringResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 13057EBF1A64A4A7000747B2 /* StringResponse.m */; };
+		13057EC61A65C57D000747B2 /* UpdateProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13057EC51A65C57D000747B2 /* UpdateProfileViewController.m */; };
 		130904271A5F658E00235ED0 /* NotificationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904261A5F658E00235ED0 /* NotificationTableViewController.m */; };
 		1309042A1A5F68F200235ED0 /* NotificationLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904291A5F68F200235ED0 /* NotificationLists.m */; };
+		13586D571A69A81500D9F2D3 /* click_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 13586D561A69A81500D9F2D3 /* click_sound.mp3 */; };
 		1363371C1A5DECFE002BCBE2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */; };
 		139750E51A606AF0002C0EAC /* EvaluateMatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */; };
 		139750E81A607C1A002C0EAC /* ViewMatchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E71A607C1A002C0EAC /* ViewMatchController.m */; };
@@ -85,11 +88,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13057EBE1A64A4A7000747B2 /* StringResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringResponse.h; sourceTree = "<group>"; };
+		13057EBF1A64A4A7000747B2 /* StringResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringResponse.m; sourceTree = "<group>"; };
+		13057EC41A65C57D000747B2 /* UpdateProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UpdateProfileViewController.h; sourceTree = "<group>"; };
+		13057EC51A65C57D000747B2 /* UpdateProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UpdateProfileViewController.m; sourceTree = "<group>"; };
 		130904251A5F658E00235ED0 /* NotificationTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationTableViewController.h; sourceTree = "<group>"; };
 		130904261A5F658E00235ED0 /* NotificationTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationTableViewController.m; sourceTree = "<group>"; };
 		130904281A5F68F200235ED0 /* NotificationLists.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationLists.h; sourceTree = "<group>"; };
 		130904291A5F68F200235ED0 /* NotificationLists.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationLists.m; sourceTree = "<group>"; };
 		1357CAD41A5CB28C0033FD9A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
+		13586D561A69A81500D9F2D3 /* click_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = click_sound.mp3; path = ../../../../../Dropbox/matchflare/click_sound.mp3; sourceTree = "<group>"; };
 		1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluateMatchViewController.h; sourceTree = "<group>"; };
 		139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluateMatchViewController.m; sourceTree = "<group>"; };
@@ -262,6 +270,8 @@
 			children = (
 				13EE5FC41A4B4B1E00C72E91 /* Main.storyboard */,
 				130904251A5F658E00235ED0 /* NotificationTableViewController.h */,
+				13057EC41A65C57D000747B2 /* UpdateProfileViewController.h */,
+				13057EC51A65C57D000747B2 /* UpdateProfileViewController.m */,
 				139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */,
 				139750E61A607C1A002C0EAC /* ViewMatchController.h */,
 				139750E71A607C1A002C0EAC /* ViewMatchController.m */,
@@ -296,6 +306,7 @@
 		13EE5FB91A4B4B1E00C72E91 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13586D561A69A81500D9F2D3 /* click_sound.mp3 */,
 				13F920711A5DCF380089A92A /* autoscaling-2011-01-01.json */,
 				13F920721A5DCF380089A92A /* cognito-identity-2014-06-30.json */,
 				13F920731A5DCF380089A92A /* dynamodb-2012-08-10.json */,
@@ -341,6 +352,8 @@
 				13FF69D91A534D07000CD363 /* OpenSans-Regular.ttf */,
 				13FF69DA1A534D07000CD363 /* OpenSans-Semibold.ttf */,
 				13FF69DB1A534D07000CD363 /* OpenSans-SemiboldItalic.ttf */,
+				13057EBE1A64A4A7000747B2 /* StringResponse.h */,
+				13057EBF1A64A4A7000747B2 /* StringResponse.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -468,6 +481,7 @@
 				13FF69E11A534DE9000CD363 /* OpenSans-SemiboldItalic.ttf in Resources */,
 				13F920841A5DCF380089A92A /* elasticloadbalancing-2012-06-01.json in Resources */,
 				13F9208A1A5DCF380089A92A /* sdb-2009-04-15.json in Resources */,
+				13586D571A69A81500D9F2D3 /* click_sound.mp3 in Resources */,
 				13EE60001A4BC7AC00C72E91 /* SplashPageViewController.xib in Resources */,
 				13EE5FCB1A4B4B1E00C72E91 /* Images.xcassets in Resources */,
 				13F920881A5DCF380089A92A /* monitoring-2010-08-01.json in Resources */,
@@ -528,6 +542,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13D7330A1A51F51000D8D11C /* PresentMatchesViewController.m in Sources */,
+				13057EC01A64A4A7000747B2 /* StringResponse.m in Sources */,
 				13EE5FF51A4B6C8F00C72E91 /* Notification.m in Sources */,
 				1309042A1A5F68F200235ED0 /* NotificationLists.m in Sources */,
 				13EE5FEF1A4B53D600C72E91 /* Person.m in Sources */,
@@ -546,6 +561,7 @@
 				13EE5FC91A4B4B1E00C72E91 /* MatchflareViewController.m in Sources */,
 				13EE5FE91A4B4C7000C72E91 /* SplashViewController.m in Sources */,
 				13D7330D1A52710F00D8D11C /* RegisterViewController.m in Sources */,
+				13057EC61A65C57D000747B2 /* UpdateProfileViewController.m in Sources */,
 				13CB7A461A5B2C1A00BD744D /* ChatMessageData.m in Sources */,
 				13D733041A51DF0000D8D11C /* Contacts.m in Sources */,
 				13CB7A431A5B283D00BD744D /* ChatViewController.m in Sources */,
@@ -680,6 +696,7 @@
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6e33b251-1bd2-437a-ab12-486b2dae6ee5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -696,6 +713,7 @@
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "6e33b251-1bd2-437a-ab12-486b2dae6ee5";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};

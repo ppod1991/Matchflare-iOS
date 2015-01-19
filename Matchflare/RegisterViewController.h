@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Person.h"
 
 @interface RegisterViewController : UIViewController
 
-@property (strong, nonatomic) NSString* imageURL;
+@property (strong, nonatomic) Person* toVerifyPerson;
 
 @end

@@ -12,5 +12,6 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *image;
 @property (strong, nonatomic) NSString* imageURL;
+@property BOOL isFromRegister;
 
 @end

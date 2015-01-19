@@ -11,6 +11,7 @@
 
 @interface PresentMatchesViewController : UIViewController
 
+@property (strong, nonatomic) IBOutlet UIView *checkboxView;
 
 @property (strong, nonatomic) IBOutlet UIView *matchOne;
 @property (strong, nonatomic) IBOutlet UIView *matchTwo;

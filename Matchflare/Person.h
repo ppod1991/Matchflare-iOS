@@ -11,7 +11,7 @@
 @protocol Person
 @end
 
-@interface Person : JSONModel
+@interface Person : JSONModel <NSMutableCopying>
 
 @property (nonatomic, strong) NSString *guessed_full_name;
 @property (nonatomic, strong) NSString *raw_phone_number;
@@ -20,6 +20,7 @@
 @property BOOL verified;
 @property (nonatomic, strong) NSString *image_url;
 @property (nonatomic, strong) NSString *registration_id;
+@property (nonatomic, strong) NSString *apn_device_token;
 @property (nonatomic, strong) NSString *contact_status;
 @property int matcher_chat_id;
 @property (nonatomic, strong) NSMutableArray *gender_preferences;
@@ -29,5 +30,6 @@
 @property (nonatomic, strong) NSMutableArray *contacts;
 
 +(BOOL)propertyIsOptional:(NSString*)propertyName;
+- (id) mutableCopyWithZone:(NSZone *)zone;
 
 @end

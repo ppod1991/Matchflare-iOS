@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Person.h"
+#import "Notification.h"
 
 @interface Global : NSObject
 
@@ -20,5 +21,11 @@
 + (void) postTo:(NSString *) path withParams:(NSDictionary *) params withBody:(id) body success:(void (^)(NSURLSessionDataTask *__strong, __strong id)) success failure:(void (^)(NSURLSessionDataTask *__strong, NSError *__strong)) failure;
 
 + (void) get:(NSString *) path withParams:(NSDictionary *) params success:(void (^)(NSURLSessionDataTask *__strong, __strong id)) success failure:(void (^)(NSURLSessionDataTask *__strong, NSError *__strong)) failure;
-
++ (void) showToastWithText: (NSString *) text;
+- (void) registerForPushNotifications;
+- (UIViewController *) controllerFromNotification: (Notification *) choseNotification;
++ (void) startProgress;
++ (void) startProgressWithString: (NSString *) progressString;
++ (void) endProgress;
++ (void) initializeProgress;
 @end

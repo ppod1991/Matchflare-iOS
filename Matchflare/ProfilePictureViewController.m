@@ -13,6 +13,7 @@
 #import "Cognito.h"
 #import "Global.h"
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "UpdateProfileViewController.h"
 
 @interface ProfilePictureViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
@@ -43,7 +44,7 @@
     [AWSServiceManager defaultServiceManager].defaultServiceConfiguration = configuration;
     //TransferManager *transferManager = [AWs]
     self.transferManager = [AWSS3TransferManager defaultS3TransferManager];
-    
+    [self choosePicture];
     
 }
 
@@ -57,8 +58,7 @@
 
 }
 
-- (IBAction)changePicturePressed:(id)sender {
-    
+- (void) choosePicture {
     //Start camera/image picker
     self.uiipc = [[UIImagePickerController alloc] init];
     self.uiipc.delegate = self;
@@ -77,6 +77,10 @@
         [self presentViewController:self.uiipc animated:YES completion:nil];    }
     
     //[self presentViewController:uiipc animated:YES completion:NULL];
+
+}
+- (IBAction)changePicturePressed:(id)sender {
+    [self choosePicture];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -134,6 +138,7 @@
 }
 
 - (IBAction)donePressed:(id)sender {
+    [Global startProgress];
     NSURL *tempPath = [NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingPathComponent:@"temp"]];
     [UIImageJPEGRepresentation(self.image.image, 0.25) writeToURL:tempPath atomically:YES];
     
@@ -150,6 +155,7 @@
 
         
     [[self.transferManager upload:uploadRequest] continueWithExecutor:[BFExecutor mainThreadExecutor] withBlock:^id(BFTask *task) {
+        [Global endProgress];
         if (task.error != nil) {
             if( task.error.code != AWSS3TransferManagerErrorCancelled
                &&
@@ -157,11 +163,17 @@
                )
             {
                 NSLog(@"Error uploading picture: %@",task.error.localizedDescription);
+                [Global showToastWithText:@"Error uploading. Try again!"];
             }
         } else {
-            NSLog(@"@Successfully uploaded picture!");
+            NSLog(@"Successfully uploaded picture!");
             self.imageURL = [NSString stringWithFormat:@"https://s3.amazonaws.com/%@/%@",uploadRequest.bucket,uploadRequest.key];
-            [self performSegueWithIdentifier:@"PictureToRegister" sender:self];
+            if (self.isFromRegister) {
+                [self performSegueWithIdentifier:@"PictureToRegister" sender:self];
+            }
+            else {
+                [self performSegueWithIdentifier:@"PictureToUpdate" sender:self];
+            }
         }
         return nil;
     }];
@@ -172,7 +184,13 @@
     if ([segue.identifier isEqualToString:@"PictureToRegister"]) {
         if ([segue.destinationViewController isKindOfClass:[RegisterViewController class]]) {
             RegisterViewController *rvc = [segue destinationViewController];
-            rvc.imageURL= self.imageURL;
+            rvc.toVerifyPerson.image_url= self.imageURL;
+        }
+    }
+    else if ([segue.identifier isEqualToString:@"PictureToUpdate"]) {
+        if ([segue.destinationViewController isKindOfClass:[UpdateProfileViewController class]]) {
+            UpdateProfileViewController *upvc = [segue destinationViewController];
+            upvc.toUpdatePerson.image_url= self.imageURL;
         }
     }
     
