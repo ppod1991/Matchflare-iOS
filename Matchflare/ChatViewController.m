@@ -11,6 +11,9 @@
 #import "Global.h"
 #import "SRWebSocket.h"
 #import "ChatMessage.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface ChatViewController()  <SRWebSocketDelegate, UITextViewDelegate>
 
@@ -24,6 +27,10 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"ChatViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     [self willEnter];
     
@@ -78,6 +85,10 @@
     NSLog(@"Failed to open websocket");
     [self.pingTimer invalidate];
     self.pingTimer = nil;
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder
+                    createExceptionWithDescription:[NSString stringWithFormat:@"Failed to open chat websocket, %@", error.localizedDescription] withFatal:@NO] build]];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
@@ -152,6 +163,11 @@
         }
 
     }
+    else {
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Error receiving message, %@", err.localizedDescription] withFatal:@NO] build]];
+    }
     
 }
 
@@ -209,10 +225,7 @@
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillResignActiveNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
-    
-
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -283,6 +296,12 @@
     //[self.data.messages addObject:message];
     
     [self finishSendingMessageAnimated:YES];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"ChatDidSendChat"
+                                                           value:nil] build]];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -14,6 +14,9 @@
 #import "Global.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UpdateProfileViewController.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface ProfilePictureViewController () <UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIActionSheetDelegate>
 
@@ -87,9 +90,21 @@
     if (buttonIndex == 0) {
         self.uiipc.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self presentViewController:self.uiipc animated:YES completion:nil];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"PictureChooseCameraPicturePressed"
+                                                               value:nil] build]];
     } else if (buttonIndex == 1) {
         self.uiipc.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:self.uiipc animated:YES completion:nil];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"PictureChooseLibraryPicturePressed"
+                                                               value:nil] build]];
     }
 }
 
@@ -106,10 +121,21 @@
     self.image.image = returnedImage;
     [self dismissViewControllerAnimated:YES completion:nil];
     
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"PictureDidChoosePicture"
+                                                           value:nil] build]];
 }
 
 
-
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"ProfilePictureViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 
 - (IBAction)rotatePressed:(id)sender {
     
@@ -135,6 +161,12 @@
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     self.image.image = newImage;
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"PictureDidRotatePicture"
+                                                           value:nil] build]];
 }
 
 - (IBAction)donePressed:(id)sender {
@@ -164,6 +196,12 @@
             {
                 NSLog(@"Error uploading picture: %@",task.error.localizedDescription);
                 [Global showToastWithText:@"Error uploading. Try again!"];
+                
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                      action:@"button_press"
+                                                                       label:@"PictureUploadFailed"
+                                                                       value:nil] build]];
             }
         } else {
             NSLog(@"Successfully uploaded picture!");
@@ -174,6 +212,12 @@
             else {
                 [self performSegueWithIdentifier:@"PictureToUpdate" sender:self];
             }
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"PictureUploadSuccessful"
+                                                                   value:nil] build]];
         }
         return nil;
     }];

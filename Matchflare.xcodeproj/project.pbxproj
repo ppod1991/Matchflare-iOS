@@ -12,6 +12,10 @@
 		130904271A5F658E00235ED0 /* NotificationTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904261A5F658E00235ED0 /* NotificationTableViewController.m */; };
 		1309042A1A5F68F200235ED0 /* NotificationLists.m in Sources */ = {isa = PBXBuildFile; fileRef = 130904291A5F68F200235ED0 /* NotificationLists.m */; };
 		13586D571A69A81500D9F2D3 /* click_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 13586D561A69A81500D9F2D3 /* click_sound.mp3 */; };
+		13586D5A1A6ED8D000D9F2D3 /* EvaluateResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 13586D591A6ED8CF00D9F2D3 /* EvaluateResponse.m */; };
+		13586D651A6F087200D9F2D3 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13586D641A6F087200D9F2D3 /* CoreData.framework */; };
+		13586D671A6F088400D9F2D3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13586D661A6F088400D9F2D3 /* SystemConfiguration.framework */; };
+		13586D691A6F108B00D9F2D3 /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 13586D681A6F108A00D9F2D3 /* libGoogleAnalyticsServices.a */; };
 		1363371C1A5DECFE002BCBE2 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */; };
 		139750E51A606AF0002C0EAC /* EvaluateMatchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */; };
 		139750E81A607C1A002C0EAC /* ViewMatchController.m in Sources */ = {isa = PBXBuildFile; fileRef = 139750E71A607C1A002C0EAC /* ViewMatchController.m */; };
@@ -34,7 +38,6 @@
 		13EE5FBF1A4B4B1E00C72E91 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FBE1A4B4B1E00C72E91 /* main.m */; };
 		13EE5FC31A4B4B1E00C72E91 /* MatchflareAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */; };
 		13EE5FC61A4B4B1E00C72E91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 13EE5FC41A4B4B1E00C72E91 /* Main.storyboard */; };
-		13EE5FC91A4B4B1E00C72E91 /* MatchflareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 13EE5FC81A4B4B1E00C72E91 /* MatchflareViewController.m */; };
 		13EE5FCB1A4B4B1E00C72E91 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13EE5FCA1A4B4B1E00C72E91 /* Images.xcassets */; };
 		13EE5FD21A4B4B1E00C72E91 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FD11A4B4B1E00C72E91 /* XCTest.framework */; };
 		13EE5FD31A4B4B1E00C72E91 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 13EE5FB21A4B4B1E00C72E91 /* Foundation.framework */; };
@@ -98,6 +101,20 @@
 		130904291A5F68F200235ED0 /* NotificationLists.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationLists.m; sourceTree = "<group>"; };
 		1357CAD41A5CB28C0033FD9A /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		13586D561A69A81500D9F2D3 /* click_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = click_sound.mp3; path = ../../../../../Dropbox/matchflare/click_sound.mp3; sourceTree = "<group>"; };
+		13586D581A6ED8CF00D9F2D3 /* EvaluateResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluateResponse.h; sourceTree = "<group>"; };
+		13586D591A6ED8CF00D9F2D3 /* EvaluateResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluateResponse.m; sourceTree = "<group>"; };
+		13586D5B1A6F084900D9F2D3 /* GAI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAI.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAI.h; sourceTree = "<group>"; };
+		13586D5C1A6F084A00D9F2D3 /* GAIDictionaryBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAIDictionaryBuilder.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAIDictionaryBuilder.h; sourceTree = "<group>"; };
+		13586D5D1A6F084A00D9F2D3 /* GAIEcommerceProduct.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProduct.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAIEcommerceProduct.h; sourceTree = "<group>"; };
+		13586D5E1A6F084A00D9F2D3 /* GAIEcommerceProductAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceProductAction.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAIEcommerceProductAction.h; sourceTree = "<group>"; };
+		13586D5F1A6F084A00D9F2D3 /* GAIEcommercePromotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAIEcommercePromotion.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAIEcommercePromotion.h; sourceTree = "<group>"; };
+		13586D601A6F084A00D9F2D3 /* GAIFields.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAIFields.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAIFields.h; sourceTree = "<group>"; };
+		13586D611A6F084A00D9F2D3 /* GAILogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAILogger.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAILogger.h; sourceTree = "<group>"; };
+		13586D621A6F084A00D9F2D3 /* GAITrackedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAITrackedViewController.h; sourceTree = "<group>"; };
+		13586D631A6F084A00D9F2D3 /* GAITracker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = ../../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/GoogleAnalytics/Library/GAITracker.h; sourceTree = "<group>"; };
+		13586D641A6F087200D9F2D3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		13586D661A6F088400D9F2D3 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		13586D681A6F108A00D9F2D3 /* libGoogleAnalyticsServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGoogleAnalyticsServices.a; path = ../../../../Downloads/GoogleAnalyticsServicesiOS_3.10/libGoogleAnalyticsServices.a; sourceTree = "<group>"; };
 		1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EvaluateMatchViewController.h; sourceTree = "<group>"; };
 		139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EvaluateMatchViewController.m; sourceTree = "<group>"; };
@@ -136,7 +153,6 @@
 		13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchflareAppDelegate.m; sourceTree = "<group>"; };
 		13EE5FC51A4B4B1E00C72E91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MatchflareViewController.h; sourceTree = "<group>"; };
-		13EE5FC81A4B4B1E00C72E91 /* MatchflareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MatchflareViewController.m; sourceTree = "<group>"; };
 		13EE5FCA1A4B4B1E00C72E91 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		13EE5FD01A4B4B1E00C72E91 /* MatchflareTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MatchflareTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		13EE5FD11A4B4B1E00C72E91 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -195,12 +211,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13F9202C1A5DCB2D0089A92A /* libsqlite3.0.dylib in Frameworks */,
+				13586D671A6F088400D9F2D3 /* SystemConfiguration.framework in Frameworks */,
+				13586D651A6F087200D9F2D3 /* CoreData.framework in Frameworks */,
 				1363371C1A5DECFE002BCBE2 /* MobileCoreServices.framework in Frameworks */,
 				13F9202E1A5DCB370089A92A /* libz.dylib in Frameworks */,
-				13F9202C1A5DCB2D0089A92A /* libsqlite3.0.dylib in Frameworks */,
 				13CB7A521A5BBF5C00BD744D /* libresolv.dylib in Frameworks */,
 				13CB7A501A5BBF4000BD744D /* libicucore.dylib in Frameworks */,
 				13CB7A4E1A5BBF2400BD744D /* CFNetwork.framework in Frameworks */,
+				13586D691A6F108B00D9F2D3 /* libGoogleAnalyticsServices.a in Frameworks */,
 				13CB7A4C1A5BBF1800BD744D /* Security.framework in Frameworks */,
 				13FF69E31A537E26000CD363 /* QuartzCore.framework in Frameworks */,
 				13EE5FB51A4B4B1E00C72E91 /* CoreGraphics.framework in Frameworks */,
@@ -246,6 +265,9 @@
 		13EE5FB11A4B4B1E00C72E91 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				13586D681A6F108A00D9F2D3 /* libGoogleAnalyticsServices.a */,
+				13586D661A6F088400D9F2D3 /* SystemConfiguration.framework */,
+				13586D641A6F087200D9F2D3 /* CoreData.framework */,
 				1363371B1A5DECFE002BCBE2 /* MobileCoreServices.framework */,
 				13F9202D1A5DCB370089A92A /* libz.dylib */,
 				13F9202B1A5DCB2D0089A92A /* libsqlite3.0.dylib */,
@@ -269,36 +291,19 @@
 			isa = PBXGroup;
 			children = (
 				13EE5FC41A4B4B1E00C72E91 /* Main.storyboard */,
-				130904251A5F658E00235ED0 /* NotificationTableViewController.h */,
-				13057EC41A65C57D000747B2 /* UpdateProfileViewController.h */,
-				13057EC51A65C57D000747B2 /* UpdateProfileViewController.m */,
-				139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */,
-				139750E61A607C1A002C0EAC /* ViewMatchController.h */,
-				139750E71A607C1A002C0EAC /* ViewMatchController.m */,
-				139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */,
-				130904261A5F658E00235ED0 /* NotificationTableViewController.m */,
-				13F631631A5F06D80070399C /* MatcheeOptionsViewController.h */,
-				13F631641A5F06D80070399C /* MatcheeOptionsViewController.m */,
-				13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */,
-				13EE5FEB1A4B537200C72E91 /* Global.m */,
 				13EE5FE81A4B4C7000C72E91 /* SplashViewController.m */,
-				13CB7A421A5B283D00BD744D /* ChatViewController.m */,
+				13D7330C1A52710F00D8D11C /* RegisterViewController.m */,
 				13E300051A5DC269008552A4 /* ProfilePictureViewController.m */,
 				13D733091A51F51000D8D11C /* PresentMatchesViewController.m */,
-				13EE5FC81A4B4B1E00C72E91 /* MatchflareViewController.m */,
-				13D7330C1A52710F00D8D11C /* RegisterViewController.m */,
+				13F631641A5F06D80070399C /* MatcheeOptionsViewController.m */,
+				13057EC51A65C57D000747B2 /* UpdateProfileViewController.m */,
+				130904261A5F658E00235ED0 /* NotificationTableViewController.m */,
+				139750E41A606AF0002C0EAC /* EvaluateMatchViewController.m */,
+				139750E71A607C1A002C0EAC /* ViewMatchController.m */,
+				13CB7A421A5B283D00BD744D /* ChatViewController.m */,
+				13EE5FEB1A4B537200C72E91 /* Global.m */,
 				13EE5FCA1A4B4B1E00C72E91 /* Images.xcassets */,
 				13EE5FB91A4B4B1E00C72E91 /* Supporting Files */,
-				13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */,
-				13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */,
-				13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */,
-				13CB7A411A5B283D00BD744D /* ChatViewController.h */,
-				13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */,
-				13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */,
-				13E300041A5DC269008552A4 /* ProfilePictureViewController.h */,
-				13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */,
-				13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */,
-				13D7330B1A52710F00D8D11C /* RegisterViewController.h */,
 			);
 			path = Matchflare;
 			sourceTree = "<group>";
@@ -306,6 +311,19 @@
 		13EE5FB91A4B4B1E00C72E91 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				13EE5FFE1A4BC7AC00C72E91 /* SplashPageViewController.xib */,
+				13CB7A491A5BBDDD00BD744D /* SocketRocket-Prefix.pch */,
+				13EE5FC11A4B4B1E00C72E91 /* MatchflareAppDelegate.h */,
+				13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */,
+				13586D5B1A6F084900D9F2D3 /* GAI.h */,
+				13586D5C1A6F084A00D9F2D3 /* GAIDictionaryBuilder.h */,
+				13586D5D1A6F084A00D9F2D3 /* GAIEcommerceProduct.h */,
+				13586D5E1A6F084A00D9F2D3 /* GAIEcommerceProductAction.h */,
+				13586D5F1A6F084A00D9F2D3 /* GAIEcommercePromotion.h */,
+				13586D601A6F084A00D9F2D3 /* GAIFields.h */,
+				13586D611A6F084A00D9F2D3 /* GAILogger.h */,
+				13586D621A6F084A00D9F2D3 /* GAITrackedViewController.h */,
+				13586D631A6F084A00D9F2D3 /* GAITracker.h */,
 				13586D561A69A81500D9F2D3 /* click_sound.mp3 */,
 				13F920711A5DCF380089A92A /* autoscaling-2011-01-01.json */,
 				13F920721A5DCF380089A92A /* cognito-identity-2014-06-30.json */,
@@ -323,9 +341,6 @@
 				13F9207E1A5DCF380089A92A /* sts-2011-06-15.json */,
 				13F9207F1A5DCF380089A92A /* css-2014-06-30.json */,
 				13EE5FEA1A4B537200C72E91 /* Global.h */,
-				13EE5FE71A4B4C7000C72E91 /* SplashViewController.h */,
-				13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */,
-				13D733081A51F50F00D8D11C /* PresentMatchesViewController.h */,
 				13EE5FED1A4B53D600C72E91 /* Person.h */,
 				13EE5FF01A4B6AF900C72E91 /* Match.h */,
 				13D733021A51DF0000D8D11C /* Contacts.h */,
@@ -333,15 +348,34 @@
 				13EE5FF31A4B6C8F00C72E91 /* Notification.h */,
 				13D733051A51F2BC00D8D11C /* MatchesAndPairs.h */,
 				130904281A5F68F200235ED0 /* NotificationLists.h */,
+				13057EBE1A64A4A7000747B2 /* StringResponse.h */,
+				13CB7A441A5B2C1A00BD744D /* ChatMessageData.h */,
+				13586D581A6ED8CF00D9F2D3 /* EvaluateResponse.h */,
+				130904251A5F658E00235ED0 /* NotificationTableViewController.h */,
+				13057EC41A65C57D000747B2 /* UpdateProfileViewController.h */,
+				139750E31A606AF0002C0EAC /* EvaluateMatchViewController.h */,
+				139750E61A607C1A002C0EAC /* ViewMatchController.h */,
+				13F631631A5F06D80070399C /* MatcheeOptionsViewController.h */,
+				13EE5FE71A4B4C7000C72E91 /* SplashViewController.h */,
+				13EE5FC71A4B4B1E00C72E91 /* MatchflareViewController.h */,
+				13D733081A51F50F00D8D11C /* PresentMatchesViewController.h */,
+				13EE5FFC1A4BC7AC00C72E91 /* SplashPageViewController.h */,
+				13E300041A5DC269008552A4 /* ProfilePictureViewController.h */,
+				13CB7A411A5B283D00BD744D /* ChatViewController.h */,
+				13D7330B1A52710F00D8D11C /* RegisterViewController.h */,
+				13CB7A471A5BBDDD00BD744D /* SRWebSocket.h */,
 				130904291A5F68F200235ED0 /* NotificationLists.m */,
 				13EE5FEE1A4B53D600C72E91 /* Person.m */,
 				13EE5FF11A4B6AF900C72E91 /* Match.m */,
 				13D733031A51DF0000D8D11C /* Contacts.m */,
 				13EE5FF71A4B6D2300C72E91 /* ChatMessage.m */,
+				13CB7A451A5B2C1A00BD744D /* ChatMessageData.m */,
 				13EE5FF41A4B6C8F00C72E91 /* Notification.m */,
 				13D733061A51F2BC00D8D11C /* MatchesAndPairs.m */,
-				13EE5FC11A4B4B1E00C72E91 /* MatchflareAppDelegate.h */,
-				13EE5FC21A4B4B1E00C72E91 /* MatchflareAppDelegate.m */,
+				13057EBF1A64A4A7000747B2 /* StringResponse.m */,
+				13586D591A6ED8CF00D9F2D3 /* EvaluateResponse.m */,
+				13CB7A481A5BBDDD00BD744D /* SRWebSocket.m */,
+				13EE5FFD1A4BC7AC00C72E91 /* SplashPageViewController.m */,
 				13EE5FBA1A4B4B1E00C72E91 /* Matchflare-Info.plist */,
 				13EE5FBB1A4B4B1E00C72E91 /* InfoPlist.strings */,
 				13EE5FBE1A4B4B1E00C72E91 /* main.m */,
@@ -352,8 +386,6 @@
 				13FF69D91A534D07000CD363 /* OpenSans-Regular.ttf */,
 				13FF69DA1A534D07000CD363 /* OpenSans-Semibold.ttf */,
 				13FF69DB1A534D07000CD363 /* OpenSans-SemiboldItalic.ttf */,
-				13057EBE1A64A4A7000747B2 /* StringResponse.h */,
-				13057EBF1A64A4A7000747B2 /* StringResponse.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -558,12 +590,12 @@
 				13EE5FC31A4B4B1E00C72E91 /* MatchflareAppDelegate.m in Sources */,
 				13F631651A5F06D80070399C /* MatcheeOptionsViewController.m in Sources */,
 				13EE5FEC1A4B537200C72E91 /* Global.m in Sources */,
-				13EE5FC91A4B4B1E00C72E91 /* MatchflareViewController.m in Sources */,
 				13EE5FE91A4B4C7000C72E91 /* SplashViewController.m in Sources */,
 				13D7330D1A52710F00D8D11C /* RegisterViewController.m in Sources */,
 				13057EC61A65C57D000747B2 /* UpdateProfileViewController.m in Sources */,
 				13CB7A461A5B2C1A00BD744D /* ChatMessageData.m in Sources */,
 				13D733041A51DF0000D8D11C /* Contacts.m in Sources */,
+				13586D5A1A6ED8D000D9F2D3 /* EvaluateResponse.m in Sources */,
 				13CB7A431A5B283D00BD744D /* ChatViewController.m in Sources */,
 				13D733071A51F2BC00D8D11C /* MatchesAndPairs.m in Sources */,
 			);
@@ -695,6 +727,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/piyushpoddar/Downloads/GoogleAnalyticsServicesiOS_3.10,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "6e33b251-1bd2-437a-ab12-486b2dae6ee5";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -712,6 +748,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Matchflare/Matchflare-Prefix.pch";
 				INFOPLIST_FILE = "Matchflare/Matchflare-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/piyushpoddar/Downloads/GoogleAnalyticsServicesiOS_3.10,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "6e33b251-1bd2-437a-ab12-486b2dae6ee5";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -12,5 +12,5 @@
 @interface RegisterViewController : UIViewController
 
 @property (strong, nonatomic) Person* toVerifyPerson;
-
+@property BOOL isFromPresent;
 @end

@@ -10,6 +10,9 @@
 #import "Global.h"
 #import "ProfilePictureViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface UpdateProfileViewController ()
 @property (strong, nonatomic) IBOutlet UIView *profileView;
@@ -53,12 +56,27 @@
            failure:^(NSURLSessionDataTask * operation, NSError * error) {
                [Global endProgress];
                NSLog(@"Unable to update person, %@", error.localizedDescription);
+               id tracker = [[GAI sharedInstance] defaultTracker];
+               [tracker send:[[GAIDictionaryBuilder
+                               createExceptionWithDescription:[NSString stringWithFormat:@"Unable to update person, %@", error.localizedDescription] withFatal:@NO] build]];
                [Global showToastWithText:@"Update failed. Try again later!"];
            }];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"UpdateUpdatePressed"
+                                                           value:nil] build]];
 }
 
 - (IBAction)chooseImagePressed:(id)sender {
     [self performSegueWithIdentifier:@"UpdateToPicture" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"UpdateChooseImagePressed"
+                                                           value:nil] build]];
 }
 
 - (IBAction)nextPreferencesPressed:(id)sender {
@@ -74,10 +92,21 @@
     
     if (genderPreferences.count < 1) {
         [Global showToastWithText:@"Must choose one preference!"];
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"UpdateInvalidPreference"
+                                                               value:nil] build]];
     }
     else {
         self.toUpdatePerson.gender_preferences = genderPreferences;
         [self animateIn:self.profileView withConstraint:self.pictureConstraint withOutgoingView:self.preferencesView withConstraint:self.preferencesConstraint];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"UpdatePreferenceSubmitted"
+                                                               value:nil] build]];
     }
     
 }
@@ -91,6 +120,12 @@
     }
     
     [self animateIn:self.preferencesView withConstraint:self.preferencesConstraint withOutgoingView:self.genderView withConstraint:self.genderConstraint];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"UpdateGenderSubmitted"
+                                                           value:nil] build]];
     
 }
 
@@ -140,6 +175,12 @@
         if ([segue.sourceViewController isKindOfClass:[ProfilePictureViewController class]]) {
             [self.profileThumbnail sd_cancelCurrentImageLoad];
             [self.profileThumbnail sd_setImageWithURL:[NSURL URLWithString:self.toUpdatePerson.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"UpdateDidChoosePicture"
+                                                                   value:nil] build]];
         }
     }
 }
@@ -189,6 +230,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"UpdateProfileViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 /*
 #pragma mark - Navigation
 

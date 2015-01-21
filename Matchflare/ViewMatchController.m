@@ -13,6 +13,9 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <QuartzCore/QuartzCore.h>
 #import "ChatViewController.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface ViewMatchController ()
 @property (strong, nonatomic) IBOutlet UIImageView *firstMatcheeImage;
@@ -30,16 +33,29 @@
 @end
 
 @implementation ViewMatchController
+
 - (IBAction)firstMatcheeChatButtonPressed:(id)sender {
     
     self.chosen_chat_id = self.thisMatch.first_matchee.matcher_chat_id;
     [self performSegueWithIdentifier:@"ViewToChat" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"ViewMatchFirstMatcheeChatButtonPressed"
+                                                           value:nil] build]];
 
 }
 - (IBAction)secondMatcheeChatButtonPressed:(id)sender {
     
     self.chosen_chat_id = self.thisMatch.second_matchee.matcher_chat_id;
     [self performSegueWithIdentifier:@"ViewToChat" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"ViewMatchSecondMatcheeChatButtonPressed"
+                                                           value:nil] build]];
 }
 
 
@@ -59,22 +75,23 @@
             success:^(NSURLSessionDataTask* operation, id responseObject) {
                 [Global endProgress];
                 NSError *err;
-                if ((BOOL) responseObject) {
-                    NSLog(@"Successfully retrieved match: %@", [responseObject description]);
-                    self.thisMatch = [[Match alloc] initWithDictionary:responseObject error:&err];
-                    [self setParticipants];
-                }
-                else {
-                    NSLog(@"Failed to retrieve match: %@", [responseObject description]);
-                }
+                NSLog(@"Successfully retrieved match: %@", [responseObject description]);
+                self.thisMatch = [[Match alloc] initWithDictionary:responseObject error:&err];
+                [self setParticipants];
                 
                 if (err) {
                     NSLog(@"Unable to convert match, %@", err.localizedDescription);
+                    id tracker = [[GAI sharedInstance] defaultTracker];
+                    [tracker send:[[GAIDictionaryBuilder
+                                    createExceptionWithDescription:[NSString stringWithFormat:@"Unable to convert match (View Match), %@", err.localizedDescription] withFatal:@NO] build]];
                 }
             }
             failure:^(NSURLSessionDataTask * operation, NSError * error) {
                 [Global endProgress];
                 NSLog(@"Error while retrieving match, %@", error.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Unable to retrieve match (View Match), %@", error.localizedDescription] withFatal:@NO] build]];
             }];
     }
     else {
@@ -171,10 +188,6 @@
     
     [self checkChatsForUnreadMessages];
     
-    
-    
-    
-    
 }
 
 
@@ -198,6 +211,9 @@
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
             NSLog(@"Error while checking if first matchee has unseen, %@", error.localizedDescription);
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:[NSString stringWithFormat:@"Error checking first matchee unseen, %@", error.localizedDescription] withFatal:@NO] build]];
         }];
     
     [Global get:@"hasUnread" withParams:@{@"contact_id":contact_id, @"chat_id":[NSNumber numberWithInt:self.thisMatch.second_matchee.matcher_chat_id]}
@@ -215,6 +231,9 @@
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
             NSLog(@"Error while checking if second matchee has unseen, %@", error.localizedDescription);
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:[NSString stringWithFormat:@"Error checking second matchee unseen, %@", error.localizedDescription] withFatal:@NO] build]];
         }];
 }
 
@@ -230,6 +249,11 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"ViewMatchController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotificationReceived:) name:@"pushNotification" object:nil];
     

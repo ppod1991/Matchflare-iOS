@@ -16,8 +16,12 @@
 #import "MatchesAndPairs.h"
 #import "PresentMatchesViewController.h"
 #import "MatchflareAppDelegate.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
-@interface SplashViewController ()
+@interface SplashViewController () <UIAlertViewDelegate>
+
 @property (strong, nonatomic) IBOutlet UIView *spashImage;
 
 @end
@@ -32,6 +36,7 @@
         //Move to next page
     }
     else {
+        
         //Go to present matches
         self.toPresentMatches = true;
         if (self.finishedProcessingContacts) {
@@ -41,6 +46,12 @@
             [Global startProgress];
         }
         NSLog(@"Going to present matches");
+        
+        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                              label:@"SplashToPresent"
+                                                              value:nil] build]];
     }
 
 }
@@ -55,6 +66,12 @@
     else {
         [Global startProgress];
     }
+    
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"SplashToRegister"
+                                                           value:nil] build]];
 
 }
 
@@ -116,42 +133,133 @@
 
 - (void) checkContactsPermission {
     
-    CFErrorRef error = NULL;
-    ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
     
     if (ABAddressBookRequestAccessWithCompletion != NULL) { // we're on iOS 6
         if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusNotDetermined) {
-            
-            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
-                if (granted) {
-                    [self retrievePhoneContacts:true withAddressBook:addressBook];
-                }
-                else {
-                    [self retrievePhoneContacts:false withAddressBook:addressBook];
-                }
-                
-            });
+            UIAlertView *contactsPermissionAlert = [[UIAlertView alloc] initWithTitle:@"Set-Up Your Friends" message:@"Matchflare lets you play cupid with your phone contacts! Grant access?" delegate:self cancelButtonTitle:@"Not Now" otherButtonTitles:@"Let's Go!",nil];
+            contactsPermissionAlert.tag = 1;
+            [contactsPermissionAlert show];
             
         }
         else if (ABAddressBookGetAuthorizationStatus() == kABAuthorizationStatusAuthorized) {
             // If the user user has earlier provided the access, then add the contact
+            CFErrorRef error = NULL;
+            ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
             [self retrievePhoneContacts:true withAddressBook:addressBook];
         }
         else {
+            CFErrorRef error = NULL;
+            ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
             [self retrievePhoneContacts:false withAddressBook:addressBook];
-
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:@"Splash Contact Permission Denied"
+                            withFatal:@NO] build]];
+            
         }
     }
     else { // we're on iOS 5 or older
+        CFErrorRef error = NULL;
+        ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
         [self retrievePhoneContacts:true withAddressBook:addressBook];
     }
 
+}
+
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+    
+    if (alertView.tag == 1) {
+        if (buttonIndex == 1) {
+            //Granted access via dialog -- ask for real permission
+            CFErrorRef error = NULL;
+            ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+                if (granted) {
+                    [self retrievePhoneContacts:true withAddressBook:addressBook];
+                    
+                    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                action:@"button_press"
+                                                                label:@"SplashRealContactPermissionGranted"
+                                                                value:nil] build]];
+                }
+                else {
+                    [self retrievePhoneContacts:false withAddressBook:addressBook];
+                    
+                    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                action:@"button_press"
+                                                                label:@"SplashRealContactPermissionDenied"
+                                                                value:nil] build]];
+                }
+                
+            });
+            
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"SplashFakeContactPermissionGranted"
+                                                                   value:nil] build]];
+            
+        }
+        else if (buttonIndex == 0) {
+            //Did not grant access via dialog
+            UIAlertView *deniedContactsAlert = [[UIAlertView alloc] initWithTitle:@"Try Again?" message:@"Matchflare needs your contacts permission before you can match your friends." delegate:self cancelButtonTitle:@"Exit Matchflare" otherButtonTitles:@"Let's Match",nil];
+            deniedContactsAlert.tag = 2;
+            [deniedContactsAlert show];
+            
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"SplashFakeContactPermissionDenied"
+                                                                   value:nil] build]];
+        }
+    }
+    else if (alertView.tag == 2) {
+        if (buttonIndex == 0) {
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"SplashSecondFakeContactPermissionDenied"
+                                                                   value:nil] build]];
+            exit(0);
+        }
+        else {
+            CFErrorRef error = NULL;
+            ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(NULL, &error);
+            ABAddressBookRequestAccessWithCompletion(addressBook, ^(bool granted, CFErrorRef error) {
+                if (granted) {
+                    [self retrievePhoneContacts:true withAddressBook:addressBook];
+                    
+                    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                          action:@"button_press"
+                                                                           label:@"SplashSecondRealContactPermissionGranted"
+                                                                           value:nil] build]];
+                }
+                else {
+                    [self retrievePhoneContacts:false withAddressBook:addressBook];
+                    
+                    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                          action:@"button_press"
+                                                                           label:@"SplashSecondRealContactPermissionDenied"
+                                                                           value:nil] build]];
+                }
+                
+            });
+        }
+    }
 }
 
 - (void) retrievePhoneContacts:(BOOL) permissionGranted withAddressBook:(ABAddressBookRef) addressBook {
     
     
     if (permissionGranted) {
+        
+        Global *global = [Global getInstance];
+        NSString *accessToken = [global accessToken];
+        
+        if (!accessToken) {
+            self.spashImage.hidden = YES;
+            [Global endProgress];
+        }
         
         #ifdef DEBUG
             NSLog(@"Fetching contact info ----> ");
@@ -212,9 +320,6 @@
         
         /////////////
         //Check and verify access token
-        Global *global = [Global getInstance];
-        
-        NSString *accessToken = [global accessToken];
         
         if (accessToken != nil) {
             [Global get:@"verifyAccessToken"
@@ -224,11 +329,15 @@
                     if ((BOOL) responseObject) {
                         NSLog(@"Successfully verified access token: %@", [responseObject description]);
                         global.thisUser = [[Person alloc] initWithDictionary:responseObject error:&err];
+                        
+                        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+                        [tracker set:@"&uid"
+                               value:[NSString stringWithFormat:@"%@",global.thisUser.contact_id]];
+                        
                         [global registerForPushNotifications];
                     }
                     else {
                         NSLog(@"Failed verification test of access token: %@", [responseObject description]);
-                        self.spashImage.hidden = YES;
                     }
                     [self processContacts:contactObjects];
                     
@@ -238,14 +347,17 @@
                 }
                 failure:^(NSURLSessionDataTask * operation, NSError * error) {
                     NSLog(@"Unable to verify access token, %@", error.localizedDescription);
-                    self.spashImage.hidden = YES;
+                    id tracker = [[GAI sharedInstance] defaultTracker];
+                    [tracker send:[[GAIDictionaryBuilder
+                                    createExceptionWithDescription:[NSString stringWithFormat:@"Unable to verify access token, %@", error.localizedDescription] withFatal:@NO] build]];
+                    
                     [self processContacts:contactObjects];
                 }];
             
         }
         else {
-            self.spashImage.hidden = YES;
             [self processContacts:contactObjects];
+            
         }
 
         
@@ -274,6 +386,9 @@
     
     void (^failureBlock) (NSURLSessionDataTask *operation, NSError *error) = ^(NSURLSessionDataTask *operation, NSError *error) {
             NSLog(@"Error processing contacts: %@", error.localizedDescription);
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Error Processing Contacts, %@", error.localizedDescription] withFatal:@NO] build]];
     };
     
     if (global.thisUser && global.thisUser.contact_id > 0) {
@@ -294,6 +409,9 @@
             MatchesAndPairs *matchesAndPairs = [[MatchesAndPairs alloc] initWithDictionary: responseObject error: &err];
             if (err) {
                 NSLog(@"Unable to process contacts, %@", err.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Unable process contacts: %@", err.localizedDescription] withFatal:@NO] build]];
             }
             else {
                 global.thisUser.contact_objects = matchesAndPairs.contact_objects;
@@ -329,10 +447,15 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"SplashViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    
     self.spashImage.hidden = NO;
     
     //Retrieve the contacts for processing
-    
+    [Global startProgress];
     [self checkContactsPermission];
 
     
@@ -477,6 +600,7 @@
         }
 
 }
+
 /*
 #pragma mark - Navigation
 

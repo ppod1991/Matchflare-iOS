@@ -12,6 +12,8 @@
 #import "Notification.h"
 #import "SplashViewController.h"
 #import "NotificationLists.h"
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
 
 @implementation MatchflareAppDelegate
 
@@ -22,8 +24,17 @@
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-
+    // Optional: automatically send uncaught exceptions to Google Analytics.
+    [GAI sharedInstance].trackUncaughtExceptions = YES;
     
+    // Optional: set Google Analytics dispatch interval to e.g. 20 seconds.
+    [GAI sharedInstance].dispatchInterval = 20;
+    
+    // Optional: set Logger to VERBOSE for debug information.
+    [[[GAI sharedInstance] logger] setLogLevel:kGAILogLevelVerbose];
+    
+    // Initialize tracker. Replace with your tracking ID.
+    [[GAI sharedInstance] trackerWithTrackingId:@"UA-42931937-3"];
     // now that everything about the App's UI is setup, let's determine what deep linking or notification data was sent
     // first, extract the notification data
     NSDictionary *notificationPayload = launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey];
@@ -45,6 +56,9 @@
     Notification* chosenNotification = [[Notification alloc] initWithString:json error:&err];
     if (err) {
         NSLog(@"Error intepreting remote notification payload");
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Unable to convert notification, %@", err.localizedDescription] withFatal:@NO] build]];
         return;
     }
     else {
@@ -62,12 +76,23 @@
             
             if (global.thisUser.contact_id > 0 && self.navigationController) {
                 [self.navigationController pushViewController:[global controllerFromNotification:chosenNotification] animated:YES];
+//                
+//                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count-1];
+
+                
             }
             else {
                 SplashViewController *rootController = (SplashViewController *)(self.window.rootViewController);
                 rootController.initialNotification = chosenNotification;
             }
             //When your app was in background and it got push notification
+            
+            //Mark this notification as seen
+            [Global postTo:@"seeNotification" withParams:@{@"notification_id":[NSNumber numberWithInt:chosenNotification.notification_id]} withBody:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+                NSLog(@"Notification successfully marked as seen");
+            } failure:^(NSURLSessionDataTask *task, NSError *err) {
+                NSLog(@"Failed to mark notification as seen: %@",err.localizedDescription);
+            }];
             
         }
     }
@@ -104,6 +129,9 @@
         }
             failure:^(NSURLSessionDataTask *task, NSError *err) {
                 NSLog(@"Failed to update apns registration id: %@",err.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Failed to update apns reg ID, %@", err.localizedDescription] withFatal:@NO] build]];
         }];
     }
     else {
@@ -134,6 +162,10 @@
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
     NSLog(@"Did Fail to Register for Remote Notifications");
     NSLog(@"%@, %@", error, error.localizedDescription);
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder
+                    createExceptionWithDescription:[NSString stringWithFormat:@"Failed to register for remote notifications, %@", error.localizedDescription] withFatal:@NO] build]];
 }
 
 - (void) application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
@@ -146,23 +178,23 @@
         [Global get:@"notificationLists" withParams:@{@"contact_id":global.thisUser.contact_id}
             success:^(NSURLSessionDataTask* operation, id responseObject) {
                 NSError *err;
-                if ((BOOL) responseObject) {
-                    NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
-                    NotificationLists *notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
-                    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:notifications.notifications.count];
-                    
-                }
-                else {
-                    NSLog(@"Failed to retrieve notifications: %@", [responseObject description]);
-                }
-                
+                NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
+                NotificationLists *notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
+                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:notifications.notifications.count];
+
                 if (err) {
                     NSLog(@"Unable to convert notifications, %@", err.localizedDescription);
+                    id tracker = [[GAI sharedInstance] defaultTracker];
+                    [tracker send:[[GAIDictionaryBuilder
+                                    createExceptionWithDescription:[NSString stringWithFormat:@"Unable to Convert notifications (Delegate), %@", err.localizedDescription] withFatal:@NO] build]];
                 }
             }
             failure:^(NSURLSessionDataTask * operation, NSError * error) {
                 [Global endProgress];
                 NSLog(@"Unable to retrieve notifications, %@", error.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Unable to Retrieve notifications (Delegate), %@", error.localizedDescription] withFatal:@NO] build]];
             }];
     }
 }

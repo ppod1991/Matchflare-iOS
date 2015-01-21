@@ -12,6 +12,9 @@
 #import "ChatViewController.h"
 #import "EvaluateMatchViewController.h"
 #import "ViewMatchController.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface NotificationTableViewController ()
 
@@ -56,23 +59,25 @@
             }
             
             NSError *err;
-            if ((BOOL) responseObject) {
-                NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
-                self.notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
-                [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count];
-                [self.tableView reloadData];
-            }
-            else {
-                NSLog(@"Failed to retrieve notifications: %@", [responseObject description]);
-            }
+            NSLog(@"Successfully retrieved notifications: %@", [responseObject description]);
+            self.notifications = [[NotificationLists alloc] initWithDictionary:responseObject error:&err];
+            [[UIApplication sharedApplication] setApplicationIconBadgeNumber:self.notifications.notifications.count];
+            [self.tableView reloadData];
+
             
             if (err) {
                 NSLog(@"Unable to convert notifications, %@", err.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Unable to convert notifications (Notification), %@", err.localizedDescription] withFatal:@NO] build]];
             }
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
             [Global endProgress];
             NSLog(@"Unable to retrieve notifications, %@", error.localizedDescription);
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:[NSString stringWithFormat:@"Unable to retrieve notification (Notification), %@", error.localizedDescription] withFatal:@NO] build]];
         }];
 
 }
@@ -84,6 +89,11 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"NotificationTableViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotificationReceived:) name:@"pushNotification" object:nil];
     
@@ -201,6 +211,12 @@
         BOOL expandedThis = [[self.isExpanded objectAtIndex:section] boolValue];
         [self.isExpanded replaceObjectAtIndex:indexPath.section withObject:[NSNumber numberWithBool:!expandedThis]];
         [self.tableView reloadData];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"NotificationToggledHeaderWithSectionNumber"
+                                                               value:[NSNumber numberWithInteger:indexPath.section]] build]];
     }
     else {
         //If notification...
@@ -234,17 +250,35 @@
             } failure:^(NSURLSessionDataTask *task, NSError *err) {
                 NSLog(@"Failed to mark notification as seen: %@",err.localizedDescription);
             }];
-                                                           
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"NotificationNotificationTapped"
+                                                                   value:nil] build]];
+            
         }
         //Pending matches
         else if (indexPath.section == 1) {
             self.chosenMatch = [self.notifications.pending_matches objectAtIndex:indexPath.row -1];
             [self performSegueWithIdentifier:@"NotificationToEvaluate" sender:self];
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"NotificationPendingMatchTapped"
+                                                                   value:nil] build]];
         }
         //Active Matcher Matches
         else if (indexPath.section == 2) {
             self.chosenMatch = [self.notifications.active_matcher_matches objectAtIndex:indexPath.row -1];
             [self performSegueWithIdentifier:@"NotificationToView" sender:self];
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                  action:@"button_press"
+                                                                   label:@"NotificationActiveMatcherMatchTapped"
+                                                                   value:nil] build]];
         }
     }
 }

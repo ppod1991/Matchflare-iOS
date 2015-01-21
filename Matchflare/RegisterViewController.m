@@ -13,6 +13,9 @@
 #import "Global.h"
 #import "StringResponse.h"
 #import "MatchflareAppDelegate.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface RegisterViewController()
 @property (strong, nonatomic) IBOutlet UIView *phoneNumberView;
@@ -135,9 +138,16 @@
 
 - (IBAction)sendSMSPressed:(id)sender {
 
+    
     NSString *potentialPhoneNumber = self.phoneNumberField.text;
     if (potentialPhoneNumber.length < 10) {
         [Global showToastWithText:@"Must enter valid phone number with area code!"];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterInvalidPhoneNumber"
+                                                               value:nil] build]];
     }
     else {
         self.rawPhoneNumber = potentialPhoneNumber;
@@ -151,6 +161,9 @@
                }
                failure:^(NSURLSessionDataTask * operation, NSError * error) {
                    NSLog(@"Error sending verification SMS: %@", error.localizedDescription);
+                   id tracker = [[GAI sharedInstance] defaultTracker];
+                   [tracker send:[[GAIDictionaryBuilder
+                                   createExceptionWithDescription:[NSString stringWithFormat:@"Error sending verification sms, %@", error.localizedDescription] withFatal:@NO] build]];
                }];
         
         //Check if there is a picture associated with this phone number already
@@ -176,7 +189,12 @@
         
         [self animateIn:self.nameView withConstraint:self.nameConstraint withOutgoingView:self.phoneNumberView withConstraint:self.phoneConstraint];
         [self.nameField becomeFirstResponder];
-
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterPhoneNumberSubmitted"
+                                                               value:nil] build]];
     }
 }
 
@@ -187,11 +205,22 @@
     
     if (whiteSpaceRange.location == NSNotFound) {
         [Global showToastWithText:@"Must enter your real first and last name!"];
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterInvalidName"
+                                                               value:nil] build]];
     }
     else {
         self.toVerifyPerson.guessed_full_name = trimmedString;
         [self animateIn:self.genderView withConstraint:self.genderConstraint withOutgoingView:self.nameView withConstraint:self.nameConstraint];
         [self.nameField resignFirstResponder];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterNameSubmitted"
+                                                               value:nil] build]];
     }
     
 
@@ -206,6 +235,12 @@
     }
     
     [self animateIn:self.preferencesView withConstraint:self.preferencesConstraint withOutgoingView:self.genderView withConstraint:self.genderConstraint];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"RegisterGenderSubmitted"
+                                                           value:nil] build]];
 }
 
 - (IBAction)nextPreferencesPressed:(id)sender {
@@ -217,26 +252,65 @@
     if (self.girlsSwitch.isOn) {
         [genderPreferences addObject:@"FEMALE"];
     }
+    
     if (genderPreferences.count < 1) {
         [Global showToastWithText:@"Must choose one preference!"];
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterInvalidPreference"
+                                                               value:nil] build]];
     }
     else {
         self.toVerifyPerson.gender_preferences = genderPreferences;
         [self animateIn:self.profileView withConstraint:self.pictureConstraint withOutgoingView:self.preferencesView withConstraint:self.preferencesConstraint];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"RegisterPreferenceSubmitted"
+                                                               value:nil] build]];
     }
 
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"RegisterViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    
+}
 - (IBAction)chooseImagePressed:(id)sender {
     [self performSegueWithIdentifier:@"RegisterToPicture" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"RegisterChooseImagePressed"
+                                                           value:nil] build]];
 }
 
 - (IBAction)nextImagePressed:(id)sender {
     [self animateIn:self.verificationView withConstraint:self.verificationConstraint withOutgoingView:self.profileView withConstraint:self.pictureConstraint];
     [self.codeField becomeFirstResponder];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"RegisterImageChosen"
+                                                           value:nil] build]];
 }
 
 - (IBAction)nextCodePressed:(id)sender {
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"RegisterCodeSubmitted"
+                                                           value:nil] build]];
     
     Global *global = [Global getInstance];
     [Global startProgress];
@@ -253,13 +327,31 @@
                    [Global showToastWithText:@"Invalid or expired code. Argh--try again!"];
                    [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
                    [self.phoneNumberField becomeFirstResponder];
+                   
+                   id tracker = [[GAI sharedInstance] defaultTracker];
+                   [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                         action:@"button_press"
+                                                                          label:@"RegisterCodeDenied"
+                                                                          value:nil] build]];
                }
                else {
                    
                    global.thisUser = receivedPerson;
                    [global setAccessToken:global.thisUser.access_token];
-                   [self performSegueWithIdentifier:@"RegisterToNavigation" sender:self];
+                   if (self.isFromPresent) {
+                       [self performSegueWithIdentifier:@"RegisterToPresent" sender:self];
+                   }
+                   else {
+                       [self performSegueWithIdentifier:@"RegisterToNavigation" sender:self];
+
+                   }
                    [global registerForPushNotifications];
+                   
+                   id tracker = [[GAI sharedInstance] defaultTracker];
+                   [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                                         action:@"button_press"
+                                                                          label:@"RegisterCodeAccepted"
+                                                                          value:nil] build]];
                }
            }
            failure:^(NSURLSessionDataTask * operation, NSError * error) {
@@ -268,6 +360,11 @@
                [Global showToastWithText:@"Invalid or expired code. Argh--try again!"];
                [self animateIn:self.phoneNumberView withConstraint:self.phoneConstraint withOutgoingView:self.verificationView withConstraint:self.verificationConstraint];
                [self.phoneNumberField becomeFirstResponder];
+               [self.genderControl setSelectedSegmentIndex:UISegmentedControlNoSegment];
+               
+               id tracker = [[GAI sharedInstance] defaultTracker];
+               [tracker send:[[GAIDictionaryBuilder
+                               createExceptionWithDescription:[NSString stringWithFormat:@"Failed to verify user, %@", error.localizedDescription] withFatal:@NO] build]];
     }];
     
 
@@ -289,6 +386,10 @@
         if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
             UINavigationController *navigationController = segue.destinationViewController;
             
+            Global *global = [Global getInstance];
+            id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker set:@"&uid"
+                   value:[NSString stringWithFormat:@"%@",global.thisUser.contact_id]];
             
             //Change color of navigation bar
             if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {

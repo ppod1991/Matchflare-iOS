@@ -31,7 +31,7 @@
         </view>
     </objects>
     <resources>
-        <image name="splash_screen_1" width="810" height="1500"/>
+        <image name="splash_screen_1" width="405" height="750"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

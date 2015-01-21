@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSNumber *contact_id;
 @property (nonatomic, strong) NSString *guessed_gender;
 @property BOOL verified;
+@property BOOL blocked_matches;
 @property (nonatomic, strong) NSString *image_url;
 @property (nonatomic, strong) NSString *registration_id;
 @property (nonatomic, strong) NSString *apn_device_token;

@@ -15,13 +15,15 @@
 #import "ChatViewController.h"
 #import "ViewMatchController.h"
 #import <SVProgressHUD.h>
+#import "GAI.h"
+#import "GAIDictionaryBuilder.h"
 
 @interface Global() <UIAlertViewDelegate>
 @end
 
 @implementation Global
 
-static progressShowing = NO;
+static BOOL progressShowing = NO;
 static Global *instance = nil;
 static NSString *baseURL = @"http://matchflare.herokuapp.com/";
 
@@ -164,12 +166,23 @@ static NSString *urlEncode(id object) {
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
-    
-    if([title isEqualToString:@"Yes"])
+    if (buttonIndex == 0) {
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"GlobalFakePushPermissionDenied"
+                                                               value:nil] build]];
+    }
+    else if(buttonIndex == 1)
     {
         MatchflareAppDelegate *delegate = (MatchflareAppDelegate *)[[UIApplication sharedApplication] delegate];
         [delegate registerForRemoteNotifications];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"GlobalFakePushPermissionGranted"
+                                                               value:nil] build]];
     }
 }
 
@@ -201,6 +214,10 @@ static NSString *urlEncode(id object) {
     }
     else {
         NSLog(@"No view controller found for this notification type!");
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Unrecognized notification received, %@", chosenNotification.push_message] withFatal:@NO] build]];
         return nil;
     }
 }

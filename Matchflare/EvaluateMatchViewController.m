@@ -13,8 +13,12 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <QuartzCore/QuartzCore.h>
 #import "ChatViewController.h"
+#import "EvaluateResponse.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
-@interface EvaluateMatchViewController () <UIActionSheetDelegate>
+@interface EvaluateMatchViewController () <UIActionSheetDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIImageView *matcherImage;
 @property (strong, nonatomic) IBOutlet UILabel *matcherLabel;
@@ -62,6 +66,12 @@
                                                     otherButtonTitles:[NSString stringWithFormat:@"Block %@",matcherName], [NSString stringWithFormat:@"Ask %@ a question",matcherName], nil];
     [actionSheet showInView:self.view];
     
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"EvaluateMatcherOptionsPressed"
+                                                           value:nil] build]];
+    
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -73,15 +83,21 @@
         
         [Global postTo:@"blockContact" withParams:@{@"contact_id":global.thisUser.contact_id,@"to_block_contact_id":self.thisMatch.matcher.contact_id} withBody:nil
         success:^(NSURLSessionDataTask* operation, id responseObject) {
-
             NSLog(@"Successfully blocked contact");
             [Global showToastWithText:@"Blocked this matcher!"];
-     
-            
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
-            NSLog(@"Error while retrieving match, %@", error.localizedDescription);
+            NSLog(@"Error blocking matcher, %@", error.localizedDescription);
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:[NSString stringWithFormat:@"Unable to block matcher, %@", error.localizedDescription] withFatal:@NO] build]];
         }];
+        
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                              action:@"button_press"
+                                                               label:@"EvaluateBlockMatcherPressed"
+                                                               value:nil] build]];
 
     } else if (buttonIndex == 1) {
         //Go to matcher chat
@@ -92,18 +108,71 @@
 - (IBAction)askButtonPressed:(id)sender {
     self.chosen_chat_id = self.thisMatchee.matcher_chat_id;
     [self performSegueWithIdentifier:@"EvaluateToChat" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"EvaluateMatcherChatPressed"
+                                                           value:nil] build]];
 }
 
 - (IBAction)passButtonPressed:(id)sender {
+    [self postWithResponse:@"REJECT"];
+
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"EvaluatePassButtonPressed"
+                                                           value:nil] build]];
+}
+
+- (void) postWithResponse: (NSString *) decision {
+    
+    
+    EvaluateResponse *response = [[EvaluateResponse alloc] init];
+    response.contact_id = [Global getInstance].thisUser.contact_id.intValue;
+    response.pair_id = self.thisMatch.pair_id;
+    response.decision = decision;
+    
+    [Global postTo:@"match/respond" withParams:nil withBody:response success:^(NSURLSessionDataTask *task, id responseObject) {
+        NSLog(@"Successfully responded");
+        if ([decision isEqualToString:@"ACCEPT"]) {
+            [Global showToastWithText:@"Great--you'll be notified if you both match."];
+        }
+        else {
+            [Global showToastWithText:@"Match passed"];
+        }
+        
+    } failure:^(NSURLSessionDataTask *task, NSError *err) {
+        NSLog(@"Failed to respond: %@", err.localizedDescription);
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Unable to post evaluate response, %@", err.localizedDescription] withFatal:@NO] build]];
+    }];
+    
+    [self performSegueWithIdentifier:@"EvaluateToPresent" sender:self];
+    
 }
 
 - (IBAction)otherMatcheeChatButtonPressed:(id)sender {
     self.chosen_chat_id = self.thisMatch.chat_id;
     [self performSegueWithIdentifier:@"EvaluateToChat" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"EvaluateOtherMatcheeChatButtonPressed"
+                                                           value:nil] build]];
 
 }
 - (IBAction)matchButtonPressed:(id)sender {
 
+    [self postWithResponse:@"ACCEPT"];
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"EvaluateMatchButtonPressed"
+                                                           value:nil] build]];
 }
 
 - (void)viewDidLoad {
@@ -115,22 +184,23 @@
             success:^(NSURLSessionDataTask* operation, id responseObject) {
                 [Global endProgress];
                 NSError *err;
-                if ((BOOL) responseObject) {
-                    NSLog(@"Successfully retrieved match: %@", [responseObject description]);
-                    self.thisMatch = [[Match alloc] initWithDictionary:responseObject error:&err];
-                    [self setParticipants];
-                }
-                else {
-                    NSLog(@"Failed to retrieve match: %@", [responseObject description]);
-                }
+                NSLog(@"Successfully retrieved match: %@", [responseObject description]);
+                self.thisMatch = [[Match alloc] initWithDictionary:responseObject error:&err];
+                [self setParticipants];
                 
                 if (err) {
                     NSLog(@"Unable to convert match, %@", err.localizedDescription);
+                    id tracker = [[GAI sharedInstance] defaultTracker];
+                    [tracker send:[[GAIDictionaryBuilder
+                                    createExceptionWithDescription:[NSString stringWithFormat:@"Unable to convert match (evaluate), %@", err.localizedDescription] withFatal:@NO] build]];
                 }
         }
             failure:^(NSURLSessionDataTask * operation, NSError * error) {
                 [Global endProgress];
                 NSLog(@"Error while retrieving match, %@", error.localizedDescription);
+                id tracker = [[GAI sharedInstance] defaultTracker];
+                [tracker send:[[GAIDictionaryBuilder
+                                createExceptionWithDescription:[NSString stringWithFormat:@"Unable to retrieve match (evaluate), %@", error.localizedDescription] withFatal:@NO] build]];
             }];
     }
     else {
@@ -142,7 +212,7 @@
     UIColor *darkColor = [UIColor colorWithRed:.05 green:.05 blue:.05 alpha:0.70];
 
     
-    self.otherMatcheeImage.layer.cornerRadius = self.otherMatcheeImage.frame.size.width / 2.0f;
+    self.otherMatcheeImage.layer.cornerRadius = self.otherMatcheeImage.frame.size.width/ 2;
     self.otherMatcheeImage.clipsToBounds = YES;
     CAGradientLayer *secondGradient = [CAGradientLayer layer];
     secondGradient.frame = self.otherMatcheeImage.bounds;
@@ -155,7 +225,7 @@
     [self.otherMatcheeImage.layer insertSublayer:secondGradient atIndex:0];
     
     
-    self.matcherImage.layer.cornerRadius = self.matcherImage.frame.size.height / 2;
+    self.matcherImage.layer.cornerRadius = self.matcherImage.frame.size.height / 2.0f;
     self.matcherImage.clipsToBounds = YES;
     
     CAGradientLayer *firstGradient = [CAGradientLayer layer];
@@ -167,6 +237,15 @@
                             (id)[darkColor CGColor],
                             nil];
     [self.matcherImage.layer insertSublayer:firstGradient atIndex:0];
+    
+    
+    //Give instructions if first time!
+    BOOL isNotFirstEvaluateEver = [[NSUserDefaults standardUserDefaults] boolForKey:@"IS_NOT_FIRST_EVALUATE"];
+    
+    if (!isNotFirstEvaluateEver) {
+        UIAlertView *evaluateInstructionsAlert = [[UIAlertView alloc] initWithTitle:@"What do you think?" message:@"Tap the ✓ if interested. If not, tap ✖︎. If you aren't sure, ask the matcher a question. \nRemember, the other person won't know your response unless you BOTH tap ✓!" delegate:self cancelButtonTitle:@"Got it!" otherButtonTitles:nil];
+        [evaluateInstructionsAlert show];
+    }
     
     // Do any additional setup after loading the view.
 }
@@ -183,6 +262,9 @@
     }
     else {
         NSLog(@"Error, this user is not in this match!");
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"User not in the evaluate match"] withFatal:@NO] build]];
     }
     
     if (self.thisMatch.is_anonymous) {
@@ -225,6 +307,7 @@
     
     self.otherMatcheeLabel.text = self.otherMatchee.guessed_full_name;
     [self.otherMatcheeImage sd_setImageWithURL: [NSURL URLWithString:self.otherMatchee.image_url] placeholderImage:[UIImage imageNamed:@"profile_template"]];
+
     
     NSString *statusText = @"thinks you'd be good with";
     if ([self.thisMatch.first_matchee.contact_status isEqualToString:@"ACCEPT"] && [self.thisMatch.second_matchee.contact_status isEqualToString:@"ACCEPT"]) {
@@ -249,10 +332,6 @@
     
     [self checkChatsForUnreadMessages];
     
-    
-    
-
-    
 }
 
 
@@ -276,6 +355,9 @@
     }
     failure:^(NSURLSessionDataTask * operation, NSError * error) {
         NSLog(@"Error while checking if other matchee has unseen, %@", error.localizedDescription);
+        id tracker = [[GAI sharedInstance] defaultTracker];
+        [tracker send:[[GAIDictionaryBuilder
+                        createExceptionWithDescription:[NSString stringWithFormat:@"Error checking other matchee unseen, %@", error.localizedDescription] withFatal:@NO] build]];
     }];
     
     [Global get:@"hasUnread" withParams:@{@"contact_id":contact_id, @"chat_id":[NSNumber numberWithInt:self.thisMatchee.matcher_chat_id]}
@@ -293,6 +375,10 @@
         }
         failure:^(NSURLSessionDataTask * operation, NSError * error) {
             NSLog(@"Error while checking if matcher has unseen, %@", error.localizedDescription);
+            
+            id tracker = [[GAI sharedInstance] defaultTracker];
+            [tracker send:[[GAIDictionaryBuilder
+                            createExceptionWithDescription:[NSString stringWithFormat:@"Error checking matcher unseen, %@", error.localizedDescription] withFatal:@NO] build]];
         }];
 }
 
@@ -308,6 +394,11 @@
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"EvaluateMatchViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushNotificationReceived:) name:@"pushNotification" object:nil];
     
@@ -329,6 +420,15 @@
         }
     }
 }
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setBool:YES forKey:@"IS_NOT_FIRST_EVALUATE"];
+        [defaults synchronize];
+    }
+}
+
 
 /*
 #pragma mark - Navigation

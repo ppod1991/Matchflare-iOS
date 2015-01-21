@@ -9,6 +9,9 @@
 #import "MatcheeOptionsViewController.h"
 #import "Person.h"
 #import "Global.h"
+#import "GAIDictionaryBuilder.h"
+#import "GAI.h"
+#import "GAIFields.h"
 
 @interface MatcheeOptionsViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
@@ -24,7 +27,7 @@
 
 - (IBAction)cancelButtonPressed:(id)sender {
     
-        [[self presentingViewController] dismissViewControllerAnimated:YES completion:NULL];
+    [[self presentingViewController] dismissViewControllerAnimated:YES completion:NULL];
     
 }
 
@@ -32,7 +35,6 @@
     if ([searchText length] > 0) {
         NSPredicate *resultPredicate = [NSPredicate predicateWithFormat:@"guessed_full_name contains[c] %@", searchText];
         self.displayedContacts = [self.contacts filteredArrayUsingPredicate:resultPredicate];
-        
     }
     else {
         self.displayedContacts = self.contacts;
@@ -57,7 +59,14 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear: animated];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker set:kGAIScreenName
+           value:@"MatcheeOptionsViewController"];
+    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+}
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.displayedContacts.count;
@@ -87,6 +96,12 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.chosenMatchee = [self.displayedContacts objectAtIndex:indexPath.row];
     [self performSegueWithIdentifier:@"ChoseToPresent" sender:self];
+    
+    id tracker = [[GAI sharedInstance] defaultTracker];
+    [tracker send:[[GAIDictionaryBuilder createEventWithCategory:@"ui_action"
+                                                          action:@"button_press"
+                                                           label:@"MatcheeOptionsChoseArbitraryMatchee"
+                                                           value:nil] build]];
 }
 
 /*
